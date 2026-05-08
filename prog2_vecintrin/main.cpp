@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <algorithm>
+#include <cstdlib>
 #include <getopt.h>
 #include <math.h>
 #include "CS149intrin.h"
@@ -277,4 +278,3 @@ float arraySumVector(float* values, int N) {
 
   return 0.0;
 }
-

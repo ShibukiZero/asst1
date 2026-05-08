@@ -1,0 +1,38 @@
+# Build outputs
+*.o
+objs/
+
+# Program binaries
+prog1_mandelbrot_threads/mandelbrot
+prog2_vecintrin/myexp
+prog3_mandelbrot_ispc/mandelbrot_ispc
+prog4_sqrt/sqrt
+prog5_saxpy/saxpy
+prog6_kmeans/kmeans
+
+# Generated experiment outputs
+*.ppm
+*.log
+*.png
+
+# K-means dataset
+prog6_kmeans/data.dat
+
+# Python local environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local scratch files
+*~
+
+# Codex local agent notes
+AGENTS.md
+.agents/

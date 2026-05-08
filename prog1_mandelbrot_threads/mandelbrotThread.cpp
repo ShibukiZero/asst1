@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cstdlib>
 #include <thread>
 
 #include "CycleTimer.h"
@@ -93,4 +94,3 @@ void mandelbrotThread(
         workers[i].join();
     }
 }
-
