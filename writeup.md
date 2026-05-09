@@ -41,7 +41,7 @@ answer. Hint: take a careful look at the three-thread datapoint.)
 
 **Answer:**
 
-I extended the contiguous-block decomposition from Q1 to arbitrary N: thread `i` owns rows `[i·H/N, (i+1)·H/N)`, and the last thread absorbs `H mod N` to cover any remainder. Each measurement below is the mean of 5 independent invocations of the binary, after 5 warmup runs at `-t 8` to settle thermal state. Raw numbers are in [`artifacts/experiments/prog1/q2/`](artifacts/experiments/prog1/q2/).
+The contiguous-block decomposition from Q1 generalizes to arbitrary N: thread `i` owns rows `[i·H/N, (i+1)·H/N)`, and the last thread absorbs `H mod N` to cover any remainder. Each measurement below is the mean of 5 independent invocations of the binary, after 5 warmup runs at `-t 8` to settle thermal state. Raw numbers are in [`artifacts/experiments/prog1/q2/`](artifacts/experiments/prog1/q2/).
 
 | Threads | View 1 mean | View 2 mean |
 |---|---|---|
@@ -70,7 +70,7 @@ This explains every feature of the curves:
 - **4 threads (~2.2×):** splitting the middle third further into two quarters reduces the worst block's cost, recovering the speedup, but the two "middle" threads still dominate.
 - **5 threads (~2.2×):** adding a fifth slice does not shorten the worst block — the heavy middle stripe is split between the same two threads as before — so wall-clock time barely improves.
 - **6–8 threads:** the heavy region is now split across more workers, so the maximum-per-thread cost drops further. View 2 lacks the up/down symmetry of view 1, so the contiguous slicing is more chaotic — that's why view 2's 3-thread point isn't a regression, but its 2-thread point is *worse* than view 1's.
-- **8 threads tops out at ~3.6× (view 1) / ~3.7× (view 2):** two compounding ceilings. (i) Even with perfect balance, the machine has only 4 physical cores; the additional 4 SMT contexts add little for a purely ALU-bound workload like Mandelbrot, since the two hyper-threads on a core compete for the same FP execution units. (ii) Contiguous slicing still leaves residual imbalance, so we don't even reach the ~4× ceiling that perfect balance on 4 cores would give.
+- **8 threads tops out at ~3.6× (view 1) / ~3.7× (view 2):** two compounding ceilings. (i) Even with perfect balance, the machine has only 4 physical cores; the additional 4 SMT contexts add little for a purely ALU-bound workload like Mandelbrot, since the two hyper-threads on a core compete for the same FP execution units. (ii) Contiguous slicing still leaves residual imbalance, so the measured curve doesn't even reach the ~4× ceiling that perfect balance on 4 cores would give.
 
 The takeaway for Q4: any decomposition that assumes "equal area = equal work" cannot do well here. A block-cyclic / interleaved assignment that statistically averages heavy and light rows across all threads will be needed to hit the 7–8× target.
 
