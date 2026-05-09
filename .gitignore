@@ -14,6 +14,8 @@ prog6_kmeans/kmeans
 *.ppm
 *.log
 *.png
+# but DO track plots saved as artifacts for the writeup
+!artifacts/**/*.png
 
 # K-means dataset
 prog6_kmeans/data.dat
