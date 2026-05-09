@@ -149,6 +149,50 @@ speedup obtained.
 
 **Answer:**
 
+**Approach: cyclic (interleaved) row decomposition.** Instead of giving each thread a contiguous block of rows, thread `i` now owns the rows whose index satisfies `row % numThreads == i`, walking the image with stride `numThreads`. The worker becomes a single loop:
+
+```cpp
+for (int row = threadId; row < height; row += numThreads) {
+    mandelbrotSerial(..., row, 1, ..., output);
+}
+```
+
+This is a single static policy that works for any thread count, requires no synchronization (output rows still don't overlap), and automatically covers `H mod N` remainder rows without a special case. The reasoning is the one Q3 made quantitative: under contiguous slicing the slowest worker dominates wall-clock time. Cyclic slicing makes every thread sample heavy and light regions in roughly equal proportion, so the worst-case worker drops sharply.
+
+**Measurement protocol.** For these experiments the laptop was on AC with the Windows "Ultimate Performance" power plan, the bench script inserted a 10 s cooldown plus a one-shot warmup before each thread count, and three particularly noisy configs (view 1 N=8, view 2 N=7, view 2 N=8) were re-run for 8 invocations each with a 20 s cooldown — their reported mean is the trimmed mean of the middle 5 samples. CSVs and full logs are under [`artifacts/experiments/prog1/q4/`](artifacts/experiments/prog1/q4/).
+
+| Threads | view 1 mean | view 2 mean |
+|---|---|---|
+| 2 | 1.83× | 1.89× |
+| 3 | 2.65× | 2.72× |
+| 4 | 3.45× | 3.47× |
+| 5 | 4.07× | 4.14× |
+| 6 | 4.82× | 4.63× |
+| 7 | 4.87× | 5.26× |
+| 8 | **5.16×** | **5.22×** |
+
+![View 1 contiguous vs cyclic](artifacts/experiments/prog1/q4/compare_view1.png)
+
+![View 2 contiguous vs cyclic](artifacts/experiments/prog1/q4/compare_view2.png)
+
+![Cyclic, view 1 vs view 2](artifacts/experiments/prog1/q4/cyclic_both_views.png)
+
+**Comparison with the Q3 contiguous baseline:**
+
+| Threads | view 1 contiguous → cyclic | view 2 contiguous → cyclic |
+|---|---|---|
+| 3 | 1.58 → **2.65** (regression eliminated) | 1.97 → 2.72 |
+| 4 | 2.22 → 3.45 | 2.24 → 3.47 |
+| 8 | 3.23 → **5.16** | 3.79 → 5.22 |
+
+Three observations corroborate the design:
+
+1. **The 3-thread regression on view 1 disappears.** Under contiguous slicing the centre row block (worker 1) was about 3× heavier than the edge blocks; under cyclic slicing the middle band's rows are spread across all three threads, so worker timing equalises.
+2. **The view 1 and view 2 curves now overlap closely.** The same code reaches 5.16× and 5.22× at 8 threads, despite the heavy region living in completely different parts of the two images. This is exactly what the Q4 hint asked for — a single decomposition policy that works on both.
+3. **Per-worker timings (visible in the bench logs) cluster within 5–15% of each other** at every N, versus the 8–12× imbalance ratios seen in Q3.
+
+**Final 8-thread speedup: 5.16× (view 1) and 5.22× (view 2).** This falls short of the README's 7–8× ceiling but is consistent with the platform: the i7-8550U is a 15 W mobile part whose multi-core sustained frequency is ~2.5–2.8 GHz versus the 4.0–4.2 GHz the desktop i7-7700K used for the original target sustains under the same load. With the imbalance ratio essentially gone (per-worker times within ~10%), the remaining gap to ideal is dominated by hyper-threading's modest gain on a purely ALU-bound kernel and laptop-class thermal/power limits, not by the decomposition.
+
 ---
 
 ### Q5
@@ -157,3 +201,22 @@ Now run your improved code with 16 threads. Is performance noticeably greater
 than when running with eight threads? Why or why not?
 
 **Answer:**
+
+**No — performance is essentially unchanged.** The cyclic worker from Q4 was rerun at `-t 16` under the same conditions (8 invocations per view, 20 s cooldown, AC + Ultimate Performance). Trimmed means of the middle 5 samples:
+
+| | -t 8 (Q4) | -t 16 (Q5) | Δ |
+|---|---|---|---|
+| view 1 | 5.16× | 5.20× | +0.04× |
+| view 2 | 5.22× | 5.24× | +0.02× |
+
+Both deltas are well inside per-run noise (view 1 -t 16 individual runs ranged 4.90–5.73). Raw numbers are in [`artifacts/experiments/prog1/q5/runs.csv`](artifacts/experiments/prog1/q5/runs.csv).
+
+**Why no improvement.** The CPU only exposes **8 hardware execution contexts** (4 physical cores × 2 hyper-threads each). At -t 8 those contexts are already saturated — every worker is on its own logical CPU. Going to -t 16 simply over-subscribes: the OS now multiplexes 16 software threads onto the same 8 contexts, time-slicing them. There is no new arithmetic capacity to recruit, so the wall-clock time can't go down.
+
+If anything, -t 16 should be very slightly *slower* than -t 8 because:
+
+- Each thread still does the same total amount of arithmetic, just split into smaller per-quantum chunks, so per-thread cache footprint and TLB pressure don't improve.
+- The OS scheduler now has twice as many runnable threads to manage, adding context-switch overhead and slightly more variable per-worker timing.
+- `printf` from 16 workers contends on stdout more.
+
+In practice these costs are tiny (low single-digit percent) on a workload as compute-heavy as Mandelbrot, which is why the measured -t 16 is *not* worse — but it isn't better either. The takeaway is that for ALU-bound code, the useful upper bound on `numThreads` is the number of hardware threads (8 here); above that the only effect is overhead.
