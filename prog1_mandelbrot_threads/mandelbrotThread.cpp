@@ -35,11 +35,17 @@ void workerThreadStart(WorkerArgs * const args) {
                         ? args->height - startRow
                         : rowsPerThread;
 
+    double t0 = CycleTimer::currentSeconds();
     mandelbrotSerial(args->x0, args->y0, args->x1, args->y1,
                      args->width, args->height,
                      startRow, numRows,
                      args->maxIterations,
                      args->output);
+    double t1 = CycleTimer::currentSeconds();
+    printf("[worker %d/%d rows %d..%d]: %.3f ms\n",
+           args->threadId, args->numThreads,
+           startRow, startRow + numRows,
+           (t1 - t0) * 1000.0);
 }
 
 //

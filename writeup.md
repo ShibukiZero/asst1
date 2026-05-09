@@ -85,6 +85,53 @@ the speedup graph you previously created?
 
 **Answer:**
 
+Per-worker timers were added around the `mandelbrotSerial` call in `workerThreadStart` (printing `[worker id/N rows a..b]: T ms`), then the same Q2 sweep was re-run for both views. Raw logs and parsed CSVs are under [`artifacts/experiments/prog1/q3/`](artifacts/experiments/prog1/q3/). Each worker time below is the median across 25 samples (5 binary invocations × 5 internal repetitions inside `main.cpp`).
+
+**View 1 — fastest vs slowest worker:**
+
+| Threads | Fastest worker (id, median ms) | Slowest worker (id, median ms) | Imbalance (slow / fast) |
+|---|---|---|---|
+| 2 | w0: 350.2 | w1: 352.4 | **1.01×** |
+| 3 | w0: 127.1 | w1: 385.3 | **3.03×** |
+| 4 | w0: 68.1 | w2: 280.3 | 4.12× |
+| 5 | w4: 33.4 | w2: 291.9 | 8.73× |
+| 6 | w0: 22.0 | w3: 229.4 | 10.43× |
+| 7 | w0: 19.4 | w3: 231.7 | 11.92× |
+| 8 | w7: 26.2 | w4: 212.3 | 8.09× |
+
+**View 2 — fastest vs slowest worker:**
+
+| Threads | Fastest worker (id, median ms) | Slowest worker (id, median ms) | Imbalance |
+|---|---|---|---|
+| 2 | w1: 161.0 | w0: 231.4 | 1.44× |
+| 3 | w2: 108.6 | w0: 179.0 | 1.65× |
+| 4 | w3: 80.5 | w0: 148.1 | 1.84× |
+| 5 | w3: 57.3 | w0: 114.1 | 1.99× |
+| 6 | w5: 47.6 | w0: 102.3 | 2.15× |
+| 7 | w6: 40.8 | w0: 93.1 | 2.28× |
+| 8 | w7: 35.8 | w0: 84.3 | 2.36× |
+
+These measurements confirm the Q2 hypothesis directly. With a fork–join schedule and contiguous-block decomposition, **wall-clock time tracks the slowest worker**, not the average; the other workers finish early and idle until the join. Several specific predictions from Q2 fall out:
+
+- **View 1, 2 threads (≈1.84×):** the upper and lower halves are within 0.7% of each other (350 vs 352 ms). Imbalance ≈ 1.01×, so this case is genuinely close to balanced — the residual gap to 2× is overhead, not imbalance.
+- **View 1, 3 threads (the 1.53× regression):** the middle slice (`w1`) takes 385 ms — that's **slower than the entire serial run with 2-way splits** (350 ms). Imbalance is 3.03×, so the predicted speedup is `3 / 3.03 ≈ 0.99`. Adding a third thread does not help because the new worker only steals work from the already-fast top/bottom slices, not from the bottleneck.
+- **View 1, 4–7 threads:** the slowest worker is consistently the one straddling the dense central body (w2 at N=4, w3 at N=6/7). Its absolute cost barely drops (280 → 230 ms) until N=8, because the dense band is only fully split at higher N. Imbalance climbs past 10×.
+- **View 1, 8 threads (≈3.6×):** the central band finally gets divided across `w3` and `w4`; max worker time falls from 230 ms to 212 ms. Imbalance drops back to ≈8×, hence the noticeable jump in speedup at this point.
+- **View 2's monotone curve:** `w0` (top slice) is *always* the slowest in view 2, and its cost falls cleanly with N (231 → 84 ms). Imbalance grows only mildly (1.4× → 2.4×), which matches the smoother, dip-free shape of the view 2 speedup plot.
+
+**Quantitative check.** A useful rule of thumb is `speedup ≈ N / imbalance`. For view 1 it predicts:
+
+| N | N / imbalance | Measured Q3 speedup |
+|---|---|---|
+| 2 | 2 / 1.01 = 1.98 | 1.83 |
+| 3 | 3 / 3.03 = 0.99 | 1.58 |
+| 4 | 4 / 4.12 = 0.97 | 2.22 |
+| 8 | 8 / 8.09 = 0.99 | 3.23 |
+
+The prediction undershoots (the true speedups are higher) because the rule assumes the fastest worker has zero cost. In practice every worker finishes some real work, so the fork–join time is `max(worker_i)`, not `sum(worker_i)/min(worker_i)`. The right way to read the table is the trend: imbalance and observed speedup move together — when imbalance is ~1, speedup approaches N; when imbalance is huge, speedup collapses to roughly `serial_time / max_worker_time`. That is exactly what Q2 conjectured.
+
+The data also explains why the 8-thread speedup tops out near 3.5–3.7× rather than approaching 8×: even after the central band is split, a single worker still owns ~210 ms of work out of an ~530 ms serial budget, so the irreducible critical path is already ~40% of serial — independent of how many physical or hyper-threads exist.
+
 ---
 
 ### Q4
