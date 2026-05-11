@@ -356,12 +356,17 @@ that the machine has roughly comparable scalar and 8-wide vector floating-point
 throughput. That ideal requires all eight SIMD lanes in a gang to stay useful
 for the same amount of time.
 
-My cooled local measurements were:
+I measured both views with `scripts/bench_prog3_part1_part2.sh`: each
+configuration used a 60 second cooldown and 5 measured invocations, and each
+invocation still used the program's built-in minimum of 3 timing repetitions.
+The raw log and parsed CSVs are archived in
+[`artifacts/experiments/prog3/part1_part2_baseline/`](artifacts/experiments/prog3/part1_part2_baseline/).
+The no-task results were:
 
 | View | Serial (ms) | ISPC (ms) | ISPC Speedup |
 |---|---:|---:|---:|
-| 1 | 280.707 | 59.496 | 4.72x |
-| 2 | 147.818 | 34.528 | 4.28x |
+| 1 | 240.755 | 49.633 | 4.85x |
+| 2 | 147.309 | 35.115 | 4.20x |
 
 The observed speedups are well below 8x because Mandelbrot has data-dependent
 control flow. Each pixel iterates until it escapes or reaches
@@ -374,13 +379,13 @@ when different exponents require different numbers of multiplications.
 
 The most challenging parts of the image for SIMD execution are therefore the
 boundary regions, where adjacent pixels can have irregular and highly varied
-escape times. View 2 had a slightly lower SIMD speedup than view 1 in this
-run, which is consistent with the idea that its zoomed-in region exposes more
-fine-grained divergence among neighboring pixels. This does not contradict the
-Program 1 thread results: Program 1 measured load balance across rows and
-threads, while this ISPC run measures lane utilization within a single
-8-wide SIMD gang. A view can have relatively good row-level thread balance but
-still have poor lane-level SIMD coherence.
+escape times. View 2 had lower SIMD speedup than view 1, which is consistent
+with the idea that its zoomed-in region exposes more fine-grained divergence
+among neighboring pixels. This does not contradict the Program 1 thread
+results: Program 1 measured load balance across rows and threads, while this
+ISPC run measures lane utilization within a single 8-wide SIMD gang. A view
+can have relatively good row-level thread balance but still have poor
+lane-level SIMD coherence.
 
 ---
 
@@ -391,6 +396,29 @@ observe on view 1? What is the speedup over the version of `mandelbrot_ispc`
 that does not partition that computation into tasks?
 
 **Answer:**
+
+With the starter tasking code, `mandelbrot_ispc_withtasks()` launches only two
+tasks. Using the same 5-invocation benchmark protocol, the view 1 result was:
+
+| Version | Time (ms) | Speedup vs Serial |
+|---|---:|---:|
+| Serial | 241.241 | 1.00x |
+| ISPC, no tasks | 49.268 | 4.90x |
+| ISPC, 2 tasks | 25.599 | 9.43x |
+
+So on view 1, the task version achieved a 9.43x speedup over the serial code.
+Compared with the no-task ISPC version from the same run, tasking improved
+runtime by `49.268 / 25.599 = 1.93x`.
+
+For comparison, view 2 in the same benchmark achieved a 6.90x speedup over
+serial, and `33.799 / 20.264 = 1.67x` over the no-task ISPC version.
+
+The task version is faster because it uses more than one core, while the
+no-task ISPC version only uses SIMD parallelism on one core. However, the
+speedup from tasking is still much less than ideal because the starter code
+creates only two large tasks. That limits the runtime to at most two cores and
+also leaves little opportunity for the task scheduler to smooth out load
+imbalance across different regions of the Mandelbrot image.
 
 ---
 
