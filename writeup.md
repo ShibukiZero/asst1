@@ -332,3 +332,86 @@ matches the intended asymptotic target for the extra credit. I verified the
 implementation in WSL with both `./myexp` and `./myexp -s 10000`; in both
 runs, the required clamped exponent test and the array-sum extra credit test
 passed.
+
+---
+
+## Program 3: Parallel Fractal Generation Using ISPC
+
+### Part 1: A Few ISPC Basics
+
+Compile and run the program `mandelbrot_ispc`. The ISPC compiler is currently
+configured to emit 8-wide AVX2 vector instructions. What is the maximum
+speedup you expect given what you know about these CPUs? Why might the number
+you observe be less than this ideal? Consider the characteristics of the
+computation you are performing, and describe the parts of the image that
+present challenges for SIMD execution. Comparing the performance of rendering
+the different views of the Mandelbrot set may help confirm your hypothesis.
+
+**Answer:**
+
+Since this build targets `avx2-i32x8`, the ideal single-core SIMD speedup is
+about 8x: in the best case, one vector instruction performs the work of eight
+scalar lanes. The assignment handout also lets us assume, for this question,
+that the machine has roughly comparable scalar and 8-wide vector floating-point
+throughput. That ideal requires all eight SIMD lanes in a gang to stay useful
+for the same amount of time.
+
+My cooled local measurements were:
+
+| View | Serial (ms) | ISPC (ms) | ISPC Speedup |
+|---|---:|---:|---:|
+| 1 | 280.707 | 59.496 | 4.72x |
+| 2 | 147.818 | 34.528 | 4.28x |
+
+The observed speedups are well below 8x because Mandelbrot has data-dependent
+control flow. Each pixel iterates until it escapes or reaches
+`maxIterations`; nearby pixels can require very different numbers of
+iterations, especially near the boundary of the Mandelbrot set. In an ISPC
+gang, lanes that escape early become inactive, but the gang must keep executing
+until the slowest active lanes finish. Those masked-off lanes reduce SIMD
+utilization, much like the inactive lanes in Program 2's `clampedExpVector`
+when different exponents require different numbers of multiplications.
+
+The most challenging parts of the image for SIMD execution are therefore the
+boundary regions, where adjacent pixels can have irregular and highly varied
+escape times. View 2 had a slightly lower SIMD speedup than view 1 in this
+run, which is consistent with the idea that its zoomed-in region exposes more
+fine-grained divergence among neighboring pixels. This does not contradict the
+Program 1 thread results: Program 1 measured load balance across rows and
+threads, while this ISPC run measures lane utilization within a single
+8-wide SIMD gang. A view can have relatively good row-level thread balance but
+still have poor lane-level SIMD coherence.
+
+---
+
+### Part 2: ISPC Tasks
+
+Run `mandelbrot_ispc` with the parameter `--tasks`. What speedup do you
+observe on view 1? What is the speedup over the version of `mandelbrot_ispc`
+that does not partition that computation into tasks?
+
+**Answer:**
+
+---
+
+There is a simple way to improve the performance of `mandelbrot_ispc --tasks`
+by changing the number of tasks the code creates. By only changing code in the
+function `mandelbrot_ispc_withtasks()`, you should be able to achieve
+performance that exceeds the sequential version of the code by over 32 times.
+How did you determine how many tasks to create? Why does the number you chose
+work best?
+
+**Answer:**
+
+---
+
+### Extra Credit
+
+What are differences between the thread abstraction (used in Program 1) and
+the ISPC task abstraction? There are some obvious differences in semantics
+between the create/join and launch/sync mechanisms, but the implications of
+these differences are more subtle. What happens when you launch 10,000 ISPC
+tasks? What happens when you launch 10,000 threads? Discuss this in the
+general case, not tied only to this Mandelbrot program.
+
+**Answer:**
