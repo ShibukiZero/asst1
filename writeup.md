@@ -431,6 +431,51 @@ work best?
 
 **Answer:**
 
+I swept task counts by temporarily changing `rowsPerTask = height / T` and
+`launch[T]` in `mandelbrot_ispc_withtasks()`, rebuilding, and running
+`./mandelbrot_ispc --tasks`. The sweep used 5 measured invocations per task
+count and only considered task counts that evenly divide the 800 image rows.
+The raw logs and parsed CSVs are archived in
+[`artifacts/experiments/prog3/task_count_sweep/`](artifacts/experiments/prog3/task_count_sweep/).
+
+| Tasks | Task ISPC (ms) | Speedup vs Serial | Task / No-Task |
+|---:|---:|---:|---:|
+| 2 | 46.946 | 8.23x | 1.91x |
+| 4 | 30.371 | 10.67x | 2.18x |
+| 8 | 13.556 | 18.36x | 3.86x |
+| 16 | 8.871 | 26.78x | 5.62x |
+| 25 | 8.173 | 30.55x | 6.47x |
+| 40 | 8.107 | 28.67x | 6.04x |
+| 50 | 8.410 | 30.03x | 6.24x |
+| 80 | 8.998 | 28.59x | 6.12x |
+| 100 | 8.346 | 29.89x | 6.17x |
+| 160 | 8.535 | 28.14x | 5.93x |
+
+The key result is that performance improves sharply from 2 tasks through about
+16 tasks, then plateaus around 8-9 ms. This happens because task count is not
+the same thing as core count. The machine has only a small number of physical
+cores, but tasks are work packets, not hardware resources. With only 2 or 4
+large tasks, the runtime has little scheduling flexibility: if one task covers
+a heavier part of the image, some cores can finish early and sit idle. With
+many smaller tasks, the ISPC runtime can keep assigning new work to whichever
+worker becomes free, which smooths out Mandelbrot's spatial load imbalance.
+
+This is also why Program 3 can be much faster than the Program 1 threaded
+version even though both use the same CPU cores. Program 1 mainly exploits
+thread-level parallelism across cores. Program 3 combines two kinds of
+parallelism: each task uses ISPC's 8-wide AVX2 SIMD execution within a core,
+and many tasks are scheduled across multiple cores. The overall speedup is
+therefore roughly "SIMD speedup times multicore task speedup", not just the
+number of cores.
+
+I would choose 40 tasks for this local run because it had the lowest mean task
+runtime in the sweep, 8.107 ms. The highest speedup ratio was at 25 tasks, but
+that ratio depends on the serial baseline measured in the same invocations,
+which was somewhat noisy. In absolute task runtime, 25, 40, 50, and 100 tasks
+are all close; this suggests that once the task count is high enough to expose
+parallelism and balance the heavy regions, additional tasks mostly add
+scheduling overhead rather than meaningful speedup.
+
 ---
 
 ### Extra Credit
