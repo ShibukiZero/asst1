@@ -250,6 +250,41 @@ void clampedExpVector(float* values, int* exponents, float* output, int N) {
   // Your solution should work for any value of
   // N and VECTOR_WIDTH, not just when VECTOR_WIDTH divides N
   //
+  for (int i=0; i<N; i+=VECTOR_WIDTH) {
+      int width = min(VECTOR_WIDTH, N - i);
+      __cs149_vec_float x;
+      __cs149_vec_float result;
+      __cs149_vec_float maxValue = _cs149_vset_float(9.999999f);
+      __cs149_vec_int y;
+      __cs149_vec_int count;
+      __cs149_vec_int zero = _cs149_vset_int(0);
+      __cs149_vec_int one = _cs149_vset_int(1);
+      __cs149_mask maskAll = _cs149_init_ones(width);
+
+      _cs149_vload_float(x, values + i, maskAll);
+      _cs149_vload_int(y, exponents + i, maskAll);
+      _cs149_vset_float(result, 1.f, maskAll);
+
+      __cs149_mask maskExpGtZero = _cs149_init_ones(0);
+      _cs149_vgt_int(maskExpGtZero, y, zero, maskAll);
+      _cs149_vmove_float(result, x, maskExpGtZero);
+      _cs149_vset_int(count, 0, maskAll);
+      _cs149_vsub_int(count, y, one, maskExpGtZero);
+
+      __cs149_mask maskCountGtZero = _cs149_init_ones(0);
+      _cs149_vgt_int(maskCountGtZero, count, zero, maskExpGtZero);
+      while (_cs149_cntbits(maskCountGtZero) > 0) {
+        _cs149_vmult_float(result, result, x, maskCountGtZero);
+        _cs149_vsub_int(count, count, one, maskCountGtZero);
+        maskCountGtZero = _cs149_init_ones(0);
+        _cs149_vgt_int(maskCountGtZero, count, zero, maskExpGtZero);
+      }
+
+      __cs149_mask maskGtMax = _cs149_init_ones(0);
+      _cs149_vgt_float(maskGtMax, result, maxValue, maskAll);
+      _cs149_vset_float(result, 9.999999f, maskGtMax);
+      _cs149_vstore_float(output + i, result, maskAll);
+  }
   
 }
 
