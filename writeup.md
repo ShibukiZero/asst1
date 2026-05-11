@@ -220,3 +220,93 @@ If anything, -t 16 should be very slightly *slower* than -t 8 because:
 - `printf` from 16 workers contends on stdout more.
 
 In practice these costs are tiny (low single-digit percent) on a workload as compute-heavy as Mandelbrot, which is why the measured -t 16 is *not* worse — but it isn't better either. The takeaway is that for ALU-bound code, the useful upper bound on `numThreads` is the number of hardware threads (8 here); above that the only effect is overhead.
+
+---
+
+## Program 2: Vectorizing Code Using SIMD Intrinsics
+
+### Q1
+
+Implement a vectorized version of `clampedExpSerial` in `clampedExpVector`.
+Your implementation should work with any combination of input array size
+(`N`) and vector width (`VECTOR_WIDTH`).
+
+**Answer:**
+
+I implemented `clampedExpVector` by processing the input arrays in chunks of
+`VECTOR_WIDTH` lanes. For each chunk, I first construct a mask with
+`_cs149_init_ones(width)`, where `width = min(VECTOR_WIDTH, N - i)`. This
+mask is important for the final chunk when `N` is not a multiple of
+`VECTOR_WIDTH`: inactive lanes are never loaded from or stored to, so the
+implementation does not read past the logical input or overwrite `output`
+beyond `N`.
+
+Within each chunk, I load the input values and exponents into vector registers.
+The result vector is initialized to `1.0`, which handles lanes whose exponent
+is zero. For lanes whose exponent is greater than zero, I move the base value
+`x` into the result and initialize a per-lane counter to `exponent - 1`. I then
+use a loop controlled by a mask of lanes whose counter is still positive. On
+each loop iteration, only those active lanes perform `result *= x`, and their
+counters are decremented. The loop stops when `_cs149_cntbits` reports that no
+lanes still need more multiplications.
+
+After the exponentiation loop, I compare the result against `9.999999f` and
+set only the lanes above that threshold to the clamp value. Finally, the result
+is stored back using the same valid-lane mask from the start of the chunk.
+
+This implementation passed the required correctness tests in WSL for
+`./myexp -s 3`, `./myexp`, and `./myexp -s 10000`, including the non-multiple
+case that checks tail handling.
+
+---
+
+### Q2
+
+Run `./myexp -s 10000` and sweep the vector width from 2, 4, 8, to 16.
+Record the resulting vector utilization. You can do this by changing the
+`#define VECTOR_WIDTH` value in `CS149intrin.h`. Does the vector utilization
+increase, decrease or stay the same as `VECTOR_WIDTH` changes? Why?
+
+**Answer:**
+
+I swept `VECTOR_WIDTH` from 2 to 16 using `./myexp -s 10000`. The run was
+automated with `scripts/bench_prog2_widths.sh`, which temporarily changes the
+`VECTOR_WIDTH` definition, rebuilds the program, runs the benchmark, records
+the vector-unit statistics, and then restores the original header. The raw logs
+and parsed CSV are archived in
+[`artifacts/experiments/prog2/q2/`](artifacts/experiments/prog2/q2/).
+
+| Vector Width | Total Vector Instructions | Vector Utilization |
+|---:|---:|---:|
+| 2 | 177724 | 87.2% |
+| 4 | 102072 | 81.8% |
+| 8 | 55374 | 79.0% |
+| 16 | 28839 | 77.7% |
+
+The total number of vector instructions decreases as `VECTOR_WIDTH` increases.
+This is expected because the same 10,000 elements are split into fewer vector
+chunks. For example, width 2 processes about 5,000 chunks, while width 16
+processes only 625 chunks.
+
+However, vector utilization decreases from 87.2% at width 2 to 77.7% at width
+16. The reason is that `clampedExp` has per-lane control flow: different
+elements have different exponents, so they require different numbers of
+multiplications. A vector chunk must keep looping until the lane with the
+largest remaining exponent is done, while lanes with smaller exponents are
+masked off in later iterations. With a larger `VECTOR_WIDTH`, each chunk is
+more likely to contain a wider mix of exponent values, so more lanes become
+inactive during the loop. Thus wider vectors reduce instruction count, but
+they also make SIMD lane divergence more visible.
+
+---
+
+### Q3 (Extra credit, 1 point)
+
+Implement a vectorized version of `arraySumSerial` in `arraySumVector`. Your
+implementation may assume that `VECTOR_WIDTH` is a factor of the input array
+size `N`. Whereas the serial implementation runs in `O(N)` time, your
+implementation should aim for runtime of `(N / VECTOR_WIDTH + VECTOR_WIDTH)`
+or even `(N / VECTOR_WIDTH + log2(VECTOR_WIDTH))`. You may find the `hadd`
+and `interleave` operations useful.
+
+**Answer:**
