@@ -310,3 +310,25 @@ or even `(N / VECTOR_WIDTH + log2(VECTOR_WIDTH))`. You may find the `hadd`
 and `interleave` operations useful.
 
 **Answer:**
+
+I implemented `arraySumVector` with a two-stage reduction. First, I keep a
+`VECTOR_WIDTH`-lane vector accumulator called `partialSum`, initialized to
+zero. The main loop loads `VECTOR_WIDTH` input values at a time and adds them
+into `partialSum`, so each lane accumulates a strided subset of the input
+array.
+
+After this vector accumulation phase, the remaining work is to reduce the
+lanes of `partialSum` into one scalar value. I do this with a tree-style
+horizontal reduction using `_cs149_hadd_float` and `_cs149_interleave_float`.
+Each `_cs149_hadd_float` combines adjacent pairs of lanes, and
+`_cs149_interleave_float` rearranges the intermediate sums so that the next
+round can combine the next larger groups. Repeating this while the active
+width halves each round reduces the vector in `log2(VECTOR_WIDTH)` steps, and
+the final sum is available in `partialSum.value[0]`.
+
+The resulting structure is `N / VECTOR_WIDTH` vector additions for the main
+accumulation plus `log2(VECTOR_WIDTH)` horizontal-reduction rounds. This
+matches the intended asymptotic target for the extra credit. I verified the
+implementation in WSL with both `./myexp` and `./myexp -s 10000`; in both
+runs, the required clamped exponent test and the array-sum extra credit test
+passed.

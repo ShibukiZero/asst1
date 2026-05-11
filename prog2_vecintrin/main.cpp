@@ -242,14 +242,6 @@ void clampedExpSerial(float* values, int* exponents, float* output, int N) {
 }
 
 void clampedExpVector(float* values, int* exponents, float* output, int N) {
-
-  //
-  // CS149 STUDENTS TODO: Implement your vectorized version of
-  // clampedExpSerial() here.
-  //
-  // Your solution should work for any value of
-  // N and VECTOR_WIDTH, not just when VECTOR_WIDTH divides N
-  //
   for (int i=0; i<N; i+=VECTOR_WIDTH) {
       int width = min(VECTOR_WIDTH, N - i);
       __cs149_vec_float x;
@@ -302,14 +294,24 @@ float arraySumSerial(float* values, int N) {
 // You can assume N is a multiple of VECTOR_WIDTH
 // You can assume VECTOR_WIDTH is a power of 2
 float arraySumVector(float* values, int N) {
-  
-  //
-  // CS149 STUDENTS TODO: Implement your vectorized version of arraySumSerial here
-  //
+  __cs149_mask maskAll = _cs149_init_ones();
+  __cs149_vec_float partialSum = _cs149_vset_float(0.f);
   
   for (int i=0; i<N; i+=VECTOR_WIDTH) {
-
+    __cs149_vec_float x;
+    _cs149_vload_float(x, values + i, maskAll);
+    _cs149_vadd_float(partialSum, partialSum, x, maskAll);
   }
 
-  return 0.0;
+  for (int width=VECTOR_WIDTH; width>1; width/=2) {
+    __cs149_vec_float folded;
+    _cs149_hadd_float(folded, partialSum);
+    if (width > 2) {
+      _cs149_interleave_float(partialSum, folded);
+    } else {
+      partialSum = folded;
+    }
+  }
+
+  return partialSum.value[0];
 }
