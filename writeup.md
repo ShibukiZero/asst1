@@ -571,6 +571,38 @@ benefit of moving from ISPC without tasks to ISPC with tasks? Explain why.
 
 **Answer:**
 
+I used an input where every element is the same slow in-range value:
+
+```cpp
+values[i] = 2.999f;
+```
+
+This value is near the upper end of the starter input range. A small iteration
+count check showed that `2.999f` needs 22 Newton iterations from
+`initialGuess = 1.0f`, more than the other checked constants, so it creates a
+large amount of uniform work. I measured it with
+`scripts/bench_prog4_q2_all_2999.sh`, using 5 measured invocations and a 60
+second cooldown before each one. The raw log and parsed CSVs are archived in
+[`artifacts/experiments/prog4/q2_all_2999/`](artifacts/experiments/prog4/q2_all_2999/).
+
+| Input | Serial (ms) | ISPC no tasks (ms) | ISPC tasks (ms) | ISPC Speedup | Task ISPC Speedup |
+|---|---:|---:|---:|---:|---:|
+| starter random input | 791.040 | 193.502 | 30.804 | 4.090x | 25.820x |
+| all `2.999f` | 1971.284 | 331.099 | 54.287 | 5.958x | 36.346x |
+
+The modification improves SIMD speedup: the no-task ISPC speedup rises from
+4.09x to 5.96x. The main reason is that every SIMD lane follows the same long
+iteration path, so less vector work is wasted waiting for slower lanes in the
+same 8-wide AVX2 gang. The absolute ISPC runtime is slower because the input
+does more total work, but the serial code slows down even more.
+
+It does not meaningfully improve the multi-core component by itself. The
+with-tasks version is 6.10x faster than the no-task ISPC version on the
+all-`2.999f` input, compared with 6.32x on the random baseline. Since all array
+positions have the same cost, the 64 ISPC tasks are already evenly balanced;
+the main improvement here comes from SIMD lane utilization rather than from
+better task-level load balance.
+
 ---
 
 ### Q3
