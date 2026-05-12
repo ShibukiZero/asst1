@@ -488,3 +488,106 @@ tasks? What happens when you launch 10,000 threads? Discuss this in the
 general case, not tied only to this Mandelbrot program.
 
 **Answer:**
+
+The key difference is that threads are execution contexts, while ISPC tasks are
+work units scheduled onto a smaller set of execution contexts. With
+`std::thread`, creating many independent pieces of work usually means creating
+many OS-level threads. Each thread has its own stack, register context,
+thread-local state, and kernel/runtime bookkeeping. The OS can schedule these
+threads onto available cores, so threads can in principle express fine-grained
+work. However, making the work unit itself an OS thread is expensive.
+
+ISPC tasks separate the work unit from the worker. A `launch` creates many
+lightweight task descriptors, and the ISPC task runtime schedules those tasks
+onto a relatively small pool of worker threads. When a worker finishes one
+task, it can take another task from the queue. This makes it practical to
+create more tasks than cores: the extra tasks give the runtime scheduling
+flexibility and help load balance irregular work, without requiring one OS
+thread per task.
+
+If I launch 10,000 ISPC tasks, I would expect the runtime to enqueue many
+small work items and execute them using its existing worker threads. There is
+still overhead, and tasks that are too tiny can spend too much time in the
+scheduler, but this is a plausible way to express fine-grained parallel work.
+If I launch 10,000 `std::thread`s, the program asks the OS to create 10,000
+full execution contexts. That can consume a large amount of memory for stacks,
+put heavy pressure on the OS scheduler, cause many context switches and
+cache/TLB disruptions, and may even hit system limits.
+
+So the implication is not that OS threads cannot load balance. At a high level,
+many runnable threads can also be scheduled onto idle cores. The problem is
+that OS threads are too heavy to be a good unit for thousands of small pieces
+of work. A thread-pool implementation of Program 1, with a fixed number of
+worker threads pulling many small row-block tasks from a queue, would be much
+closer to the ISPC task abstraction. ISPC tasks provide that separation
+directly: tasks describe work, while the runtime maps that work onto the
+available execution resources.
+
+---
+
+## Program 4: Iterative `sqrt`
+
+### Q1
+
+Build and run `sqrt`. Report the ISPC implementation speedup for a single CPU
+core (no tasks) and when using all cores (with tasks). What is the speedup due
+to SIMD parallelization? What is the speedup due to multi-core
+parallelization?
+
+**Answer:**
+
+I measured the starter random-input baseline with `scripts/bench_prog4_q1.sh`.
+The script rebuilds `prog4_sqrt` and runs `./sqrt` 5 times, with a 60 second
+cooldown before each measured invocation. Each invocation still uses the
+program's built-in minimum of 3 timing repetitions. The raw log and parsed
+CSVs are archived in
+[`artifacts/experiments/prog4/q1_baseline/`](artifacts/experiments/prog4/q1_baseline/).
+
+The starter input is pseudo-random values in approximately `[0.001, 2.999]`.
+The mean results were:
+
+| Version | Time (ms) | Speedup vs Serial |
+|---|---:|---:|
+| Serial | 791.040 | 1.00x |
+| ISPC, no tasks | 193.502 | 4.09x |
+| ISPC, tasks | 30.804 | 25.82x |
+
+The speedup due to SIMD parallelization is the improvement from serial to ISPC
+without tasks, which was 4.09x. The additional speedup due to multi-core task
+parallelization is the improvement from ISPC without tasks to ISPC with tasks,
+`193.502 / 30.804 = 6.32x`. The total speedup from serial to task ISPC was
+25.82x.
+
+---
+
+### Q2
+
+Modify the contents of the array `values` to improve the relative speedup of
+the ISPC implementations. Construct a specific input that maximizes speedup
+over the sequential version of the code and report the resulting speedup
+achieved for both the with-tasks and without-tasks ISPC implementations. Does
+the modification improve SIMD speedup? Does it improve multi-core speedup, the
+benefit of moving from ISPC without tasks to ISPC with tasks? Explain why.
+
+**Answer:**
+
+---
+
+### Q3
+
+Construct a specific input for `sqrt` that minimizes speedup for ISPC without
+tasks over the sequential version of the code. Describe this input, explain why
+you chose it, and report the resulting relative performance of the ISPC
+implementations. What is the reason for the loss in efficiency? Keep in mind
+that the ISPC target is AVX2, which generates 8-wide SIMD instructions.
+
+**Answer:**
+
+---
+
+### Q4 (Extra Credit)
+
+Write a version of `sqrt` manually using AVX2 intrinsics. The implementation
+should be nearly as fast as, or faster than, the binary produced by ISPC.
+
+**Answer:**
