@@ -10,6 +10,43 @@ the image are computed by different processors.
 
 **Answer:**
 
+I added a manual AVX2 implementation in `prog4_sqrt/sqrtAVX2.cpp` and wired it
+into `prog4_sqrt/main.cpp` and the Makefile. The implementation processes 8
+`float` values at a time using `__m256`, matching the AVX2 width used by the
+ISPC target. It computes the same Newton iteration as the serial and ISPC
+versions, but explicitly manages a per-lane activity mask:
+
+```cpp
+__m256 active = _mm256_cmp_ps(error, threshold, _CMP_GT_OQ);
+
+while (_mm256_movemask_ps(active) != 0) {
+    ...
+    guess = _mm256_blendv_ps(guess, next, active);
+    ...
+}
+```
+
+The blend keeps inactive lanes unchanged after they have converged, while lanes
+whose error is still above the threshold continue iterating. This is the manual
+AVX2 equivalent of the masked SPMD loop that ISPC generates.
+
+I measured the starter random input with `scripts/bench_prog4_q4_avx2.sh`,
+using 5 measured invocations and a 60 second cooldown before each one. The raw
+log and parsed CSVs are archived in
+[`artifacts/experiments/prog4/q4_avx2/`](artifacts/experiments/prog4/q4_avx2/).
+
+| Version | Time (ms) | Speedup vs Serial |
+|---|---:|---:|
+| serial | 761.960 | 1.000x |
+| ISPC no tasks | 184.305 | 4.136x |
+| manual AVX2 | 139.256 | 5.474x |
+| ISPC tasks | 32.242 | 24.146x |
+
+The manual AVX2 version is faster than the no-task ISPC version on this run:
+its runtime is 0.755x the ISPC runtime, or about 1.32x faster. It is still much
+slower than the tasking ISPC version because this AVX2 implementation only uses
+SIMD parallelism on one core; it does not add multi-core task parallelism.
+
 Implementation: in `workerThreadStart`, the image is partitioned into contiguous row blocks based on `threadId` and `numThreads`. With two threads, thread 0 handles rows `[0, height/2)` and thread 1 handles rows `[height/2, height)`. The last thread absorbs the `height % numThreads` remainder so that heights not divisible by the thread count still cover the whole image. Each thread passes the original full-image `output` pointer to `mandelbrotSerial`, which writes to absolute row indices via `j*width + i`. Since the row ranges don't overlap, no synchronization is needed.
 
 Measured on an i7-8550U laptop (view 1, 1600×1200):

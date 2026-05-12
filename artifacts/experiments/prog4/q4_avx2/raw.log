@@ -1,0 +1,47 @@
+=== Program 4 Q4 AVX2 benchmark: cooldown 60s + 5 measured invocations ===
+Input: starter pseudo-random values in [0.001, 2.999]
+--- invocation 1 (cooldown 60s) ---
+[sqrt serial]:		[755.601] ms
+[sqrt ispc]:		[185.170] ms
+[sqrt avx2]:		[138.334] ms
+[sqrt task ispc]:	[42.125] ms
+				(4.08x speedup from ISPC)
+				(5.46x speedup from AVX2)
+				(0.75x AVX2/ISPC runtime ratio)
+				(17.94x speedup from task ISPC)
+--- invocation 2 (cooldown 60s) ---
+[sqrt serial]:		[746.084] ms
+[sqrt ispc]:		[179.348] ms
+[sqrt avx2]:		[135.852] ms
+[sqrt task ispc]:	[29.669] ms
+				(4.16x speedup from ISPC)
+				(5.49x speedup from AVX2)
+				(0.76x AVX2/ISPC runtime ratio)
+				(25.15x speedup from task ISPC)
+--- invocation 3 (cooldown 60s) ---
+[sqrt serial]:		[751.441] ms
+[sqrt ispc]:		[180.340] ms
+[sqrt avx2]:		[137.107] ms
+[sqrt task ispc]:	[30.337] ms
+				(4.17x speedup from ISPC)
+				(5.48x speedup from AVX2)
+				(0.76x AVX2/ISPC runtime ratio)
+				(24.77x speedup from task ISPC)
+--- invocation 4 (cooldown 60s) ---
+[sqrt serial]:		[772.094] ms
+[sqrt ispc]:		[191.949] ms
+[sqrt avx2]:		[146.563] ms
+[sqrt task ispc]:	[31.142] ms
+				(4.02x speedup from ISPC)
+				(5.27x speedup from AVX2)
+				(0.76x AVX2/ISPC runtime ratio)
+				(24.79x speedup from task ISPC)
+--- invocation 5 (cooldown 60s) ---
+[sqrt serial]:		[784.581] ms
+[sqrt ispc]:		[184.717] ms
+[sqrt avx2]:		[138.423] ms
+[sqrt task ispc]:	[27.938] ms
+				(4.25x speedup from ISPC)
+				(5.67x speedup from AVX2)
+				(0.75x AVX2/ISPC runtime ratio)
+				(28.08x speedup from task ISPC)

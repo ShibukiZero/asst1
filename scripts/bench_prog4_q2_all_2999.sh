@@ -56,7 +56,7 @@ for run in $(seq 1 "$RUNS"); do
 
   serial_ms=$(echo "$out" | sed -nE 's/.*\[([0-9.]+)\] ms.*/\1/p' | sed -n '1p')
   ispc_ms=$(echo "$out" | sed -nE 's/.*\[([0-9.]+)\] ms.*/\1/p' | sed -n '2p')
-  task_ms=$(echo "$out" | sed -nE 's/.*\[([0-9.]+)\] ms.*/\1/p' | sed -n '3p')
+  task_ms=$(echo "$out" | sed -nE 's/.*\[([0-9.]+)\] ms.*/\1/p' | sed -n '4p')
   ispc_speedup=$(echo "$out" | awk -F'[()]' '/speedup from ISPC/ {gsub(/x speedup from ISPC/, "", $2); print $2; exit}')
   task_speedup=$(echo "$out" | awk -F'[()]' '/speedup from task ISPC/ {gsub(/x speedup from task ISPC/, "", $2); print $2}')
   task_over_ispc=$(awk -v ispc="$ispc_ms" -v task="$task_ms" 'BEGIN { printf "%.3f", ispc / task }')
