@@ -1,0 +1,33 @@
+=== Program 4 Q3 alternating fast/slow input: cooldown 60s + 5 measured invocations ===
+Input: values[i] = (i % 2 == 0) ? 1.0f : 2.999f
+Expected effect: each 8-wide gang mixes 0-iteration lanes with slow 2.999f lanes.
+--- invocation 1 (cooldown 60s) ---
+[sqrt serial]:		[940.766] ms
+[sqrt ispc]:		[309.246] ms
+[sqrt task ispc]:	[53.155] ms
+				(3.04x speedup from ISPC)
+				(17.70x speedup from task ISPC)
+--- invocation 2 (cooldown 60s) ---
+[sqrt serial]:		[975.217] ms
+[sqrt ispc]:		[325.352] ms
+[sqrt task ispc]:	[47.908] ms
+				(3.00x speedup from ISPC)
+				(20.36x speedup from task ISPC)
+--- invocation 3 (cooldown 60s) ---
+[sqrt serial]:		[951.513] ms
+[sqrt ispc]:		[329.886] ms
+[sqrt task ispc]:	[51.997] ms
+				(2.88x speedup from ISPC)
+				(18.30x speedup from task ISPC)
+--- invocation 4 (cooldown 60s) ---
+[sqrt serial]:		[941.180] ms
+[sqrt ispc]:		[328.289] ms
+[sqrt task ispc]:	[50.828] ms
+				(2.87x speedup from ISPC)
+				(18.52x speedup from task ISPC)
+--- invocation 5 (cooldown 60s) ---
+[sqrt serial]:		[1056.327] ms
+[sqrt ispc]:		[336.066] ms
+[sqrt task ispc]:	[58.935] ms
+				(3.14x speedup from ISPC)
+				(17.92x speedup from task ISPC)

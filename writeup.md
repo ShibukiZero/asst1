@@ -615,6 +615,45 @@ that the ISPC target is AVX2, which generates 8-wide SIMD instructions.
 
 **Answer:**
 
+I used one slow value per 8-wide AVX2 gang:
+
+```cpp
+values[i] = (i % 8 == 0) ? 2.999f : 1.0f;
+```
+
+`1.0f` is the fast case because the initial guess is already exact, so the
+Newton loop exits immediately. `2.999f` is the slow in-range value used in Q2.
+This pattern is more extreme than a simple 4-fast/4-slow alternation: every
+gang still contains a slow lane, so SIMD execution time stays close to the
+all-slow case, but 7 of the 8 scalar elements are fast, which makes the serial
+baseline much faster. I measured this case with
+`scripts/bench_prog4_q3_one_slow_per_gang.sh`, again using 5 measured
+invocations and a 60 second cooldown before each one. The raw log and parsed
+CSVs are archived in
+[`artifacts/experiments/prog4/q3_one_slow_per_gang/`](artifacts/experiments/prog4/q3_one_slow_per_gang/).
+
+| Input | Serial (ms) | ISPC no tasks (ms) | ISPC tasks (ms) | ISPC Speedup | Task ISPC Speedup |
+|---|---:|---:|---:|---:|---:|
+| starter random input | 791.040 | 193.502 | 30.804 | 4.090x | 25.820x |
+| all `2.999f` | 1971.284 | 331.099 | 54.287 | 5.958x | 36.346x |
+| alternating `1.0f` / `2.999f` | 973.001 | 325.768 | 52.565 | 2.986x | 18.560x |
+| one `2.999f` per 8 values | 275.354 | 323.708 | 51.996 | 0.854x | 5.310x |
+
+This is much worse for no-task ISPC than the simple alternating input. The
+serial code benefits from the fast 7/8 of the array: most elements exit in 0
+loop iterations, so the serial runtime falls to 275.354 ms. The SIMD version
+does not get the same benefit. In each 8-wide gang, seven lanes with `1.0f`
+become inactive immediately, but the gang still keeps executing the loop until
+the one `2.999f` lane finishes. Those inactive lanes represent wasted SIMD
+capacity, so the no-task ISPC speedup falls below 1x: the ISPC version is
+slower than the serial version for this input.
+
+The task version still improves wall-clock time by running many gangs across
+cores, but the input is not designed to make task scheduling worse: every task
+receives about the same mix of fast and slow values. Therefore the loss in
+efficiency is primarily SIMD lane divergence within each gang, not load
+imbalance between tasks.
+
 ---
 
 ### Q4 (Extra Credit)
