@@ -1,0 +1,1102 @@
+=== Warmup: 5 runs at -t 8 -v 2 ===
+
+=== Measurements: 5 runs per thread count, view 2 ===
+
+------- threads = 2 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[344.769] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/2 rows 600..1200]: 155.203 ms
+[worker 0/2 rows 0..600]: 225.854 ms
+[worker 1/2 rows 600..1200]: 170.279 ms
+[worker 0/2 rows 0..600]: 235.571 ms
+[worker 1/2 rows 600..1200]: 155.858 ms
+[worker 0/2 rows 0..600]: 234.048 ms
+[worker 1/2 rows 600..1200]: 165.531 ms
+[worker 0/2 rows 0..600]: 231.375 ms
+[worker 1/2 rows 600..1200]: 161.037 ms
+[worker 0/2 rows 0..600]: 223.449 ms
+[mandelbrot thread]:		[223.685] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.54x speedup from 2 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[346.667] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/2 rows 600..1200]: 171.636 ms
+[worker 0/2 rows 0..600]: 246.898 ms
+[worker 1/2 rows 600..1200]: 161.347 ms
+[worker 0/2 rows 0..600]: 228.083 ms
+[worker 1/2 rows 600..1200]: 155.500 ms
+[worker 0/2 rows 0..600]: 219.529 ms
+[worker 1/2 rows 600..1200]: 160.538 ms
+[worker 0/2 rows 0..600]: 233.005 ms
+[worker 1/2 rows 600..1200]: 175.680 ms
+[worker 0/2 rows 0..600]: 253.057 ms
+[mandelbrot thread]:		[219.808] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.58x speedup from 2 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[353.153] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/2 rows 600..1200]: 168.229 ms
+[worker 0/2 rows 0..600]: 233.973 ms
+[worker 1/2 rows 600..1200]: 154.595 ms
+[worker 0/2 rows 0..600]: 223.512 ms
+[worker 1/2 rows 600..1200]: 158.740 ms
+[worker 0/2 rows 0..600]: 228.215 ms
+[worker 1/2 rows 600..1200]: 156.040 ms
+[worker 0/2 rows 0..600]: 224.733 ms
+[worker 1/2 rows 600..1200]: 158.419 ms
+[worker 0/2 rows 0..600]: 223.054 ms
+[mandelbrot thread]:		[223.289] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.58x speedup from 2 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[347.188] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/2 rows 600..1200]: 147.833 ms
+[worker 0/2 rows 0..600]: 213.477 ms
+[worker 1/2 rows 600..1200]: 164.221 ms
+[worker 0/2 rows 0..600]: 233.919 ms
+[worker 1/2 rows 600..1200]: 169.662 ms
+[worker 0/2 rows 0..600]: 237.141 ms
+[worker 1/2 rows 600..1200]: 166.230 ms
+[worker 0/2 rows 0..600]: 240.182 ms
+[worker 1/2 rows 600..1200]: 153.531 ms
+[worker 0/2 rows 0..600]: 217.762 ms
+[mandelbrot thread]:		[213.632] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.63x speedup from 2 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[340.851] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/2 rows 600..1200]: 142.922 ms
+[worker 0/2 rows 0..600]: 207.743 ms
+[worker 1/2 rows 600..1200]: 155.211 ms
+[worker 0/2 rows 0..600]: 218.605 ms
+[worker 1/2 rows 600..1200]: 173.430 ms
+[worker 0/2 rows 0..600]: 239.625 ms
+[worker 1/2 rows 600..1200]: 171.657 ms
+[worker 0/2 rows 0..600]: 240.205 ms
+[worker 1/2 rows 600..1200]: 166.834 ms
+[worker 0/2 rows 0..600]: 237.542 ms
+[mandelbrot thread]:		[207.946] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.64x speedup from 2 threads)
+
+------- threads = 3 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[367.133] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/3 rows 800..1200]: 122.113 ms
+[worker 1/3 rows 400..800]: 123.484 ms
+[worker 0/3 rows 0..400]: 188.491 ms
+[worker 2/3 rows 800..1200]: 121.194 ms
+[worker 1/3 rows 400..800]: 136.328 ms
+[worker 0/3 rows 0..400]: 201.518 ms
+[worker 2/3 rows 800..1200]: 124.493 ms
+[worker 1/3 rows 400..800]: 133.302 ms
+[worker 0/3 rows 0..400]: 204.844 ms
+[worker 2/3 rows 800..1200]: 131.535 ms
+[worker 1/3 rows 400..800]: 148.654 ms
+[worker 0/3 rows 0..400]: 218.991 ms
+[worker 2/3 rows 800..1200]: 150.115 ms
+[worker 1/3 rows 400..800]: 167.010 ms
+[worker 0/3 rows 0..400]: 238.952 ms
+[mandelbrot thread]:		[189.444] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.94x speedup from 3 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[343.342] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/3 rows 800..1200]: 105.793 ms
+[worker 1/3 rows 400..800]: 114.819 ms
+[worker 0/3 rows 0..400]: 171.215 ms
+[worker 2/3 rows 800..1200]: 104.069 ms
+[worker 1/3 rows 400..800]: 113.093 ms
+[worker 0/3 rows 0..400]: 174.930 ms
+[worker 2/3 rows 800..1200]: 108.039 ms
+[worker 1/3 rows 400..800]: 112.180 ms
+[worker 0/3 rows 0..400]: 178.211 ms
+[worker 2/3 rows 800..1200]: 105.087 ms
+[worker 1/3 rows 400..800]: 110.608 ms
+[worker 0/3 rows 0..400]: 176.337 ms
+[worker 2/3 rows 800..1200]: 115.886 ms
+[worker 1/3 rows 400..800]: 125.338 ms
+[worker 0/3 rows 0..400]: 196.951 ms
+[mandelbrot thread]:		[171.436] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.00x speedup from 3 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[341.299] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/3 rows 400..800]: 118.582 ms
+[worker 2/3 rows 800..1200]: 118.828 ms
+[worker 0/3 rows 0..400]: 178.715 ms
+[worker 2/3 rows 800..1200]: 113.542 ms
+[worker 1/3 rows 400..800]: 118.341 ms
+[worker 0/3 rows 0..400]: 188.231 ms
+[worker 2/3 rows 800..1200]: 112.152 ms
+[worker 1/3 rows 400..800]: 121.141 ms
+[worker 0/3 rows 0..400]: 184.757 ms
+[worker 2/3 rows 800..1200]: 109.653 ms
+[worker 1/3 rows 400..800]: 112.329 ms
+[worker 0/3 rows 0..400]: 182.600 ms
+[worker 2/3 rows 800..1200]: 108.210 ms
+[worker 1/3 rows 400..800]: 115.227 ms
+[worker 0/3 rows 0..400]: 181.478 ms
+[mandelbrot thread]:		[178.997] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.91x speedup from 3 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[351.973] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/3 rows 800..1200]: 102.281 ms
+[worker 1/3 rows 400..800]: 113.763 ms
+[worker 0/3 rows 0..400]: 173.221 ms
+[worker 2/3 rows 800..1200]: 108.139 ms
+[worker 1/3 rows 400..800]: 111.534 ms
+[worker 0/3 rows 0..400]: 177.045 ms
+[worker 2/3 rows 800..1200]: 108.612 ms
+[worker 1/3 rows 400..800]: 117.180 ms
+[worker 0/3 rows 0..400]: 185.911 ms
+[worker 2/3 rows 800..1200]: 106.692 ms
+[worker 1/3 rows 400..800]: 110.401 ms
+[worker 0/3 rows 0..400]: 177.703 ms
+[worker 2/3 rows 800..1200]: 112.237 ms
+[worker 1/3 rows 400..800]: 122.961 ms
+[worker 0/3 rows 0..400]: 178.973 ms
+[mandelbrot thread]:		[173.441] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.03x speedup from 3 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[340.010] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 1/3 rows 400..800]: 109.900 ms
+[worker 2/3 rows 800..1200]: 110.271 ms
+[worker 0/3 rows 0..400]: 178.945 ms
+[worker 2/3 rows 800..1200]: 104.907 ms
+[worker 1/3 rows 400..800]: 108.809 ms
+[worker 0/3 rows 0..400]: 174.106 ms
+[worker 2/3 rows 800..1200]: 106.727 ms
+[worker 1/3 rows 400..800]: 113.443 ms
+[worker 0/3 rows 0..400]: 173.797 ms
+[worker 2/3 rows 800..1200]: 106.089 ms
+[worker 1/3 rows 400..800]: 115.751 ms
+[worker 0/3 rows 0..400]: 180.341 ms
+[worker 2/3 rows 800..1200]: 103.560 ms
+[worker 1/3 rows 400..800]: 110.905 ms
+[worker 0/3 rows 0..400]: 178.847 ms
+[mandelbrot thread]:		[174.044] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.95x speedup from 3 threads)
+
+------- threads = 4 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[347.122] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 3/4 rows 900..1200]: 84.563 ms
+[worker 1/4 rows 300..600]: 88.046 ms
+[worker 2/4 rows 600..900]: 91.750 ms
+[worker 0/4 rows 0..300]: 158.209 ms
+[worker 3/4 rows 900..1200]: 90.135 ms
+[worker 1/4 rows 300..600]: 93.054 ms
+[worker 2/4 rows 600..900]: 96.295 ms
+[worker 0/4 rows 0..300]: 162.084 ms
+[worker 2/4 rows 600..900]: 87.868 ms
+[worker 3/4 rows 900..1200]: 90.310 ms
+[worker 1/4 rows 300..600]: 91.008 ms
+[worker 0/4 rows 0..300]: 157.197 ms
+[worker 3/4 rows 900..1200]: 103.368 ms
+[worker 2/4 rows 600..900]: 103.873 ms
+[worker 1/4 rows 300..600]: 104.710 ms
+[worker 0/4 rows 0..300]: 180.390 ms
+[worker 3/4 rows 900..1200]: 106.388 ms
+[worker 1/4 rows 300..600]: 110.660 ms
+[worker 2/4 rows 600..900]: 112.945 ms
+[worker 0/4 rows 0..300]: 178.020 ms
+[mandelbrot thread]:		[157.557] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.20x speedup from 4 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[369.312] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 3/4 rows 900..1200]: 114.441 ms
+[worker 1/4 rows 300..600]: 143.848 ms
+[worker 2/4 rows 600..900]: 150.517 ms
+[worker 0/4 rows 0..300]: 207.110 ms
+[worker 3/4 rows 900..1200]: 118.183 ms
+[worker 2/4 rows 600..900]: 178.585 ms
+[worker 1/4 rows 300..600]: 228.882 ms
+[worker 0/4 rows 0..300]: 230.083 ms
+[worker 3/4 rows 900..1200]: 136.624 ms
+[worker 1/4 rows 300..600]: 180.003 ms
+[worker 2/4 rows 600..900]: 210.161 ms
+[worker 0/4 rows 0..300]: 234.451 ms
+[worker 3/4 rows 900..1200]: 132.027 ms
+[worker 1/4 rows 300..600]: 168.211 ms
+[worker 2/4 rows 600..900]: 200.190 ms
+[worker 0/4 rows 0..300]: 242.716 ms
+[worker 3/4 rows 900..1200]: 121.092 ms
+[worker 2/4 rows 600..900]: 143.959 ms
+[worker 1/4 rows 300..600]: 150.696 ms
+[worker 0/4 rows 0..300]: 212.545 ms
+[mandelbrot thread]:		[207.574] ms
+Wrote image file mandelbrot-thread.ppm
+				(1.78x speedup from 4 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[291.491] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 3/4 rows 900..1200]: 65.242 ms
+[worker 1/4 rows 300..600]: 67.568 ms
+[worker 2/4 rows 600..900]: 67.548 ms
+[worker 0/4 rows 0..300]: 120.191 ms
+[worker 1/4 rows 300..600]: 70.172 ms
+[worker 3/4 rows 900..1200]: 71.235 ms
+[worker 2/4 rows 600..900]: 71.833 ms
+[worker 0/4 rows 0..300]: 128.905 ms
+[worker 3/4 rows 900..1200]: 71.745 ms
+[worker 1/4 rows 300..600]: 75.704 ms
+[worker 2/4 rows 600..900]: 77.349 ms
+[worker 0/4 rows 0..300]: 133.065 ms
+[worker 3/4 rows 900..1200]: 73.886 ms
+[worker 1/4 rows 300..600]: 74.419 ms
+[worker 2/4 rows 600..900]: 74.840 ms
+[worker 0/4 rows 0..300]: 129.476 ms
+[worker 3/4 rows 900..1200]: 73.986 ms
+[worker 2/4 rows 600..900]: 77.977 ms
+[worker 1/4 rows 300..600]: 80.973 ms
+[worker 0/4 rows 0..300]: 136.623 ms
+[mandelbrot thread]:		[120.452] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.42x speedup from 4 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[335.051] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 3/4 rows 900..1200]: 79.524 ms
+[worker 2/4 rows 600..900]: 82.750 ms
+[worker 1/4 rows 300..600]: 84.592 ms
+[worker 0/4 rows 0..300]: 144.932 ms
+[worker 3/4 rows 900..1200]: 78.422 ms
+[worker 1/4 rows 300..600]: 83.235 ms
+[worker 2/4 rows 600..900]: 83.831 ms
+[worker 0/4 rows 0..300]: 145.844 ms
+[worker 3/4 rows 900..1200]: 80.453 ms
+[worker 2/4 rows 600..900]: 80.980 ms
+[worker 1/4 rows 300..600]: 81.974 ms
+[worker 0/4 rows 0..300]: 148.073 ms
+[worker 3/4 rows 900..1200]: 83.467 ms
+[worker 1/4 rows 300..600]: 85.896 ms
+[worker 2/4 rows 600..900]: 88.392 ms
+[worker 0/4 rows 0..300]: 150.728 ms
+[worker 3/4 rows 900..1200]: 88.578 ms
+[worker 2/4 rows 600..900]: 90.279 ms
+[worker 1/4 rows 300..600]: 106.542 ms
+[worker 0/4 rows 0..300]: 168.172 ms
+[mandelbrot thread]:		[145.329] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.31x speedup from 4 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[296.597] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/4 rows 600..900]: 64.306 ms
+[worker 3/4 rows 900..1200]: 64.580 ms
+[worker 1/4 rows 300..600]: 66.544 ms
+[worker 0/4 rows 0..300]: 118.193 ms
+[worker 3/4 rows 900..1200]: 69.097 ms
+[worker 1/4 rows 300..600]: 72.939 ms
+[worker 2/4 rows 600..900]: 75.292 ms
+[worker 0/4 rows 0..300]: 128.014 ms
+[worker 3/4 rows 900..1200]: 72.109 ms
+[worker 1/4 rows 300..600]: 74.250 ms
+[worker 2/4 rows 600..900]: 77.565 ms
+[worker 0/4 rows 0..300]: 131.081 ms
+[worker 3/4 rows 900..1200]: 72.531 ms
+[worker 1/4 rows 300..600]: 73.875 ms
+[worker 2/4 rows 600..900]: 74.438 ms
+[worker 0/4 rows 0..300]: 129.423 ms
+[worker 3/4 rows 900..1200]: 69.998 ms
+[worker 1/4 rows 300..600]: 74.791 ms
+[worker 2/4 rows 600..900]: 74.886 ms
+[worker 0/4 rows 0..300]: 131.948 ms
+[mandelbrot thread]:		[118.451] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.50x speedup from 4 threads)
+
+------- threads = 5 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[291.987] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 4/5 rows 960..1200]: 53.520 ms
+[worker 3/5 rows 720..960]: 54.532 ms
+[worker 1/5 rows 240..480]: 56.782 ms
+[worker 2/5 rows 480..720]: 60.690 ms
+[worker 0/5 rows 0..240]: 110.334 ms
+[worker 1/5 rows 240..480]: 57.627 ms
+[worker 3/5 rows 720..960]: 58.681 ms
+[worker 4/5 rows 960..1200]: 58.746 ms
+[worker 2/5 rows 480..720]: 64.846 ms
+[worker 0/5 rows 0..240]: 115.599 ms
+[worker 4/5 rows 960..1200]: 61.484 ms
+[worker 3/5 rows 720..960]: 63.386 ms
+[worker 1/5 rows 240..480]: 65.080 ms
+[worker 2/5 rows 480..720]: 70.317 ms
+[worker 0/5 rows 0..240]: 123.948 ms
+[worker 3/5 rows 720..960]: 61.360 ms
+[worker 1/5 rows 240..480]: 62.195 ms
+[worker 4/5 rows 960..1200]: 62.436 ms
+[worker 2/5 rows 480..720]: 69.784 ms
+[worker 0/5 rows 0..240]: 123.399 ms
+[worker 3/5 rows 720..960]: 60.718 ms
+[worker 1/5 rows 240..480]: 65.644 ms
+[worker 4/5 rows 960..1200]: 65.574 ms
+[worker 2/5 rows 480..720]: 68.250 ms
+[worker 0/5 rows 0..240]: 121.307 ms
+[mandelbrot thread]:		[110.821] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.63x speedup from 5 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[290.820] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 4/5 rows 960..1200]: 51.825 ms
+[worker 3/5 rows 720..960]: 55.258 ms
+[worker 1/5 rows 240..480]: 58.189 ms
+[worker 2/5 rows 480..720]: 65.405 ms
+[worker 0/5 rows 0..240]: 112.273 ms
+[worker 3/5 rows 720..960]: 55.352 ms
+[worker 4/5 rows 960..1200]: 55.589 ms
+[worker 1/5 rows 240..480]: 57.952 ms
+[worker 2/5 rows 480..720]: 61.549 ms
+[worker 0/5 rows 0..240]: 112.649 ms
+[worker 3/5 rows 720..960]: 57.807 ms
+[worker 4/5 rows 960..1200]: 57.924 ms
+[worker 1/5 rows 240..480]: 60.684 ms
+[worker 2/5 rows 480..720]: 61.595 ms
+[worker 0/5 rows 0..240]: 111.818 ms
+[worker 1/5 rows 240..480]: 56.308 ms
+[worker 3/5 rows 720..960]: 56.997 ms
+[worker 4/5 rows 960..1200]: 58.575 ms
+[worker 2/5 rows 480..720]: 62.213 ms
+[worker 0/5 rows 0..240]: 114.051 ms
+[worker 3/5 rows 720..960]: 57.302 ms
+[worker 1/5 rows 240..480]: 58.568 ms
+[worker 4/5 rows 960..1200]: 58.429 ms
+[worker 2/5 rows 480..720]: 65.542 ms
+[worker 0/5 rows 0..240]: 112.126 ms
+[mandelbrot thread]:		[112.200] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.59x speedup from 5 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[296.200] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 4/5 rows 960..1200]: 51.349 ms
+[worker 3/5 rows 720..960]: 52.927 ms
+[worker 1/5 rows 240..480]: 54.112 ms
+[worker 2/5 rows 480..720]: 60.149 ms
+[worker 0/5 rows 0..240]: 105.881 ms
+[worker 3/5 rows 720..960]: 53.845 ms
+[worker 4/5 rows 960..1200]: 55.993 ms
+[worker 1/5 rows 240..480]: 57.617 ms
+[worker 2/5 rows 480..720]: 65.118 ms
+[worker 0/5 rows 0..240]: 108.895 ms
+[worker 4/5 rows 960..1200]: 53.630 ms
+[worker 3/5 rows 720..960]: 56.911 ms
+[worker 1/5 rows 240..480]: 61.592 ms
+[worker 2/5 rows 480..720]: 66.855 ms
+[worker 0/5 rows 0..240]: 113.531 ms
+[worker 3/5 rows 720..960]: 60.300 ms
+[worker 4/5 rows 960..1200]: 61.490 ms
+[worker 1/5 rows 240..480]: 62.707 ms
+[worker 2/5 rows 480..720]: 69.295 ms
+[worker 0/5 rows 0..240]: 116.475 ms
+[worker 3/5 rows 720..960]: 59.238 ms
+[worker 4/5 rows 960..1200]: 60.995 ms
+[worker 1/5 rows 240..480]: 63.142 ms
+[worker 2/5 rows 480..720]: 68.406 ms
+[worker 0/5 rows 0..240]: 117.379 ms
+[mandelbrot thread]:		[106.218] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.79x speedup from 5 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[290.175] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 4/5 rows 960..1200]: 51.809 ms
+[worker 1/5 rows 240..480]: 52.545 ms
+[worker 3/5 rows 720..960]: 53.024 ms
+[worker 2/5 rows 480..720]: 59.527 ms
+[worker 0/5 rows 0..240]: 105.123 ms
+[worker 3/5 rows 720..960]: 56.026 ms
+[worker 4/5 rows 960..1200]: 56.750 ms
+[worker 1/5 rows 240..480]: 58.849 ms
+[worker 2/5 rows 480..720]: 65.224 ms
+[worker 0/5 rows 0..240]: 114.190 ms
+[worker 4/5 rows 960..1200]: 53.860 ms
+[worker 3/5 rows 720..960]: 58.414 ms
+[worker 1/5 rows 240..480]: 60.937 ms
+[worker 2/5 rows 480..720]: 63.032 ms
+[worker 0/5 rows 0..240]: 113.093 ms
+[worker 4/5 rows 960..1200]: 57.250 ms
+[worker 3/5 rows 720..960]: 58.937 ms
+[worker 1/5 rows 240..480]: 62.630 ms
+[worker 2/5 rows 480..720]: 65.344 ms
+[worker 0/5 rows 0..240]: 114.150 ms
+[worker 4/5 rows 960..1200]: 61.833 ms
+[worker 3/5 rows 720..960]: 64.154 ms
+[worker 1/5 rows 240..480]: 66.303 ms
+[worker 2/5 rows 480..720]: 74.182 ms
+[worker 0/5 rows 0..240]: 121.401 ms
+[mandelbrot thread]:		[105.481] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.75x speedup from 5 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[293.487] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 3/5 rows 720..960]: 51.371 ms
+[worker 4/5 rows 960..1200]: 51.351 ms
+[worker 1/5 rows 240..480]: 53.908 ms
+[worker 2/5 rows 480..720]: 59.419 ms
+[worker 0/5 rows 0..240]: 105.189 ms
+[worker 4/5 rows 960..1200]: 55.847 ms
+[worker 3/5 rows 720..960]: 56.196 ms
+[worker 1/5 rows 240..480]: 56.903 ms
+[worker 2/5 rows 480..720]: 61.904 ms
+[worker 0/5 rows 0..240]: 109.180 ms
+[worker 3/5 rows 720..960]: 56.221 ms
+[worker 4/5 rows 960..1200]: 57.986 ms
+[worker 1/5 rows 240..480]: 61.929 ms
+[worker 2/5 rows 480..720]: 67.687 ms
+[worker 0/5 rows 0..240]: 116.059 ms
+[worker 3/5 rows 720..960]: 57.266 ms
+[worker 4/5 rows 960..1200]: 59.727 ms
+[worker 1/5 rows 240..480]: 61.914 ms
+[worker 2/5 rows 480..720]: 64.595 ms
+[worker 0/5 rows 0..240]: 114.484 ms
+[worker 4/5 rows 960..1200]: 57.836 ms
+[worker 1/5 rows 240..480]: 59.117 ms
+[worker 3/5 rows 720..960]: 59.686 ms
+[worker 2/5 rows 480..720]: 65.567 ms
+[worker 0/5 rows 0..240]: 116.990 ms
+[mandelbrot thread]:		[105.536] ms
+Wrote image file mandelbrot-thread.ppm
+				(2.78x speedup from 5 threads)
+
+------- threads = 6 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[299.986] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 5/6 rows 1000..1200]: 46.036 ms
+[worker 2/6 rows 400..600]: 47.175 ms
+[worker 4/6 rows 800..1000]: 47.656 ms
+[worker 3/6 rows 600..800]: 51.236 ms
+[worker 1/6 rows 200..400]: 55.504 ms
+[worker 0/6 rows 0..200]: 93.849 ms
+[worker 5/6 rows 1000..1200]: 45.214 ms
+[worker 2/6 rows 400..600]: 47.399 ms
+[worker 4/6 rows 800..1000]: 47.695 ms
+[worker 3/6 rows 600..800]: 49.443 ms
+[worker 1/6 rows 200..400]: 54.946 ms
+[worker 0/6 rows 0..200]: 98.755 ms
+[worker 5/6 rows 1000..1200]: 45.227 ms
+[worker 4/6 rows 800..1000]: 49.171 ms
+[worker 2/6 rows 400..600]: 50.939 ms
+[worker 3/6 rows 600..800]: 51.548 ms
+[worker 1/6 rows 200..400]: 55.544 ms
+[worker 0/6 rows 0..200]: 101.223 ms
+[worker 5/6 rows 1000..1200]: 46.444 ms
+[worker 4/6 rows 800..1000]: 48.795 ms
+[worker 2/6 rows 400..600]: 50.355 ms
+[worker 3/6 rows 600..800]: 51.647 ms
+[worker 1/6 rows 200..400]: 56.887 ms
+[worker 0/6 rows 0..200]: 100.006 ms
+[worker 5/6 rows 1000..1200]: 47.299 ms
+[worker 2/6 rows 400..600]: 51.842 ms
+[worker 4/6 rows 800..1000]: 52.287 ms
+[worker 3/6 rows 600..800]: 54.180 ms
+[worker 1/6 rows 200..400]: 59.394 ms
+[worker 0/6 rows 0..200]: 103.377 ms
+[mandelbrot thread]:		[94.326] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.18x speedup from 6 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[293.453] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 5/6 rows 1000..1200]: 41.741 ms
+[worker 4/6 rows 800..1000]: 43.131 ms
+[worker 3/6 rows 600..800]: 45.623 ms
+[worker 2/6 rows 400..600]: 45.841 ms
+[worker 1/6 rows 200..400]: 51.540 ms
+[worker 0/6 rows 0..200]: 90.263 ms
+[worker 5/6 rows 1000..1200]: 43.867 ms
+[worker 2/6 rows 400..600]: 47.750 ms
+[worker 4/6 rows 800..1000]: 47.800 ms
+[worker 3/6 rows 600..800]: 49.485 ms
+[worker 1/6 rows 200..400]: 53.402 ms
+[worker 0/6 rows 0..200]: 94.917 ms
+[worker 5/6 rows 1000..1200]: 44.137 ms
+[worker 2/6 rows 400..600]: 47.236 ms
+[worker 4/6 rows 800..1000]: 48.960 ms
+[worker 3/6 rows 600..800]: 51.184 ms
+[worker 1/6 rows 200..400]: 54.395 ms
+[worker 0/6 rows 0..200]: 96.668 ms
+[worker 5/6 rows 1000..1200]: 48.610 ms
+[worker 4/6 rows 800..1000]: 50.734 ms
+[worker 2/6 rows 400..600]: 51.941 ms
+[worker 3/6 rows 600..800]: 54.122 ms
+[worker 1/6 rows 200..400]: 60.049 ms
+[worker 0/6 rows 0..200]: 104.814 ms
+[worker 5/6 rows 1000..1200]: 48.250 ms
+[worker 4/6 rows 800..1000]: 51.387 ms
+[worker 2/6 rows 400..600]: 52.572 ms
+[worker 3/6 rows 600..800]: 54.167 ms
+[worker 1/6 rows 200..400]: 59.632 ms
+[worker 0/6 rows 0..200]: 105.091 ms
+[mandelbrot thread]:		[90.859] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.23x speedup from 6 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[299.819] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 5/6 rows 1000..1200]: 45.185 ms
+[worker 2/6 rows 400..600]: 46.642 ms
+[worker 4/6 rows 800..1000]: 47.450 ms
+[worker 3/6 rows 600..800]: 48.993 ms
+[worker 1/6 rows 200..400]: 55.069 ms
+[worker 0/6 rows 0..200]: 96.301 ms
+[worker 5/6 rows 1000..1200]: 48.460 ms
+[worker 4/6 rows 800..1000]: 51.671 ms
+[worker 3/6 rows 600..800]: 52.218 ms
+[worker 2/6 rows 400..600]: 53.806 ms
+[worker 1/6 rows 200..400]: 60.370 ms
+[worker 0/6 rows 0..200]: 107.922 ms
+[worker 5/6 rows 1000..1200]: 48.152 ms
+[worker 2/6 rows 400..600]: 51.322 ms
+[worker 4/6 rows 800..1000]: 51.262 ms
+[worker 3/6 rows 600..800]: 54.791 ms
+[worker 1/6 rows 200..400]: 60.398 ms
+[worker 0/6 rows 0..200]: 102.472 ms
+[worker 5/6 rows 1000..1200]: 48.558 ms
+[worker 2/6 rows 400..600]: 51.480 ms
+[worker 3/6 rows 600..800]: 54.033 ms
+[worker 4/6 rows 800..1000]: 54.303 ms
+[worker 1/6 rows 200..400]: 59.235 ms
+[worker 0/6 rows 0..200]: 102.347 ms
+[worker 5/6 rows 1000..1200]: 48.514 ms
+[worker 4/6 rows 800..1000]: 50.580 ms
+[worker 2/6 rows 400..600]: 53.892 ms
+[worker 3/6 rows 600..800]: 56.153 ms
+[worker 1/6 rows 200..400]: 61.486 ms
+[worker 0/6 rows 0..200]: 105.048 ms
+[mandelbrot thread]:		[96.767] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.10x speedup from 6 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[292.304] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 5/6 rows 1000..1200]: 44.423 ms
+[worker 2/6 rows 400..600]: 45.106 ms
+[worker 4/6 rows 800..1000]: 47.047 ms
+[worker 3/6 rows 600..800]: 49.945 ms
+[worker 1/6 rows 200..400]: 52.553 ms
+[worker 0/6 rows 0..200]: 92.250 ms
+[worker 5/6 rows 1000..1200]: 44.680 ms
+[worker 4/6 rows 800..1000]: 46.905 ms
+[worker 2/6 rows 400..600]: 48.004 ms
+[worker 3/6 rows 600..800]: 49.870 ms
+[worker 1/6 rows 200..400]: 55.082 ms
+[worker 0/6 rows 0..200]: 96.539 ms
+[worker 5/6 rows 1000..1200]: 47.551 ms
+[worker 2/6 rows 400..600]: 48.243 ms
+[worker 4/6 rows 800..1000]: 48.782 ms
+[worker 3/6 rows 600..800]: 50.649 ms
+[worker 1/6 rows 200..400]: 57.912 ms
+[worker 0/6 rows 0..200]: 101.321 ms
+[worker 5/6 rows 1000..1200]: 49.169 ms
+[worker 2/6 rows 400..600]: 55.984 ms
+[worker 4/6 rows 800..1000]: 56.531 ms
+[worker 3/6 rows 600..800]: 57.363 ms
+[worker 1/6 rows 200..400]: 62.369 ms
+[worker 0/6 rows 0..200]: 106.024 ms
+[worker 5/6 rows 1000..1200]: 48.319 ms
+[worker 4/6 rows 800..1000]: 51.021 ms
+[worker 2/6 rows 400..600]: 51.388 ms
+[worker 3/6 rows 600..800]: 56.641 ms
+[worker 1/6 rows 200..400]: 58.130 ms
+[worker 0/6 rows 0..200]: 105.424 ms
+[mandelbrot thread]:		[92.773] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.15x speedup from 6 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[295.895] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 4/6 rows 800..1000]: 43.633 ms
+[worker 5/6 rows 1000..1200]: 43.557 ms
+[worker 2/6 rows 400..600]: 44.979 ms
+[worker 3/6 rows 600..800]: 48.263 ms
+[worker 1/6 rows 200..400]: 53.055 ms
+[worker 0/6 rows 0..200]: 92.772 ms
+[worker 5/6 rows 1000..1200]: 47.998 ms
+[worker 2/6 rows 400..600]: 53.813 ms
+[worker 3/6 rows 600..800]: 54.159 ms
+[worker 4/6 rows 800..1000]: 55.394 ms
+[worker 1/6 rows 200..400]: 59.506 ms
+[worker 0/6 rows 0..200]: 106.636 ms
+[worker 5/6 rows 1000..1200]: 49.679 ms
+[worker 4/6 rows 800..1000]: 54.888 ms
+[worker 2/6 rows 400..600]: 56.355 ms
+[worker 3/6 rows 600..800]: 60.418 ms
+[worker 1/6 rows 200..400]: 61.998 ms
+[worker 0/6 rows 0..200]: 109.244 ms
+[worker 5/6 rows 1000..1200]: 47.558 ms
+[worker 4/6 rows 800..1000]: 50.548 ms
+[worker 2/6 rows 400..600]: 53.279 ms
+[worker 3/6 rows 600..800]: 55.279 ms
+[worker 1/6 rows 200..400]: 60.243 ms
+[worker 0/6 rows 0..200]: 108.461 ms
+[worker 5/6 rows 1000..1200]: 49.117 ms
+[worker 2/6 rows 400..600]: 52.633 ms
+[worker 4/6 rows 800..1000]: 53.902 ms
+[worker 3/6 rows 600..800]: 55.669 ms
+[worker 1/6 rows 200..400]: 60.589 ms
+[worker 0/6 rows 0..200]: 104.339 ms
+[mandelbrot thread]:		[93.224] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.17x speedup from 6 threads)
+
+------- threads = 7 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[294.235] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 6/7 rows 1026..1200]: 36.370 ms
+[worker 2/7 rows 342..513]: 37.754 ms
+[worker 4/7 rows 684..855]: 39.151 ms
+[worker 5/7 rows 855..1026]: 41.785 ms
+[worker 3/7 rows 513..684]: 45.729 ms
+[worker 1/7 rows 171..342]: 50.565 ms
+[worker 0/7 rows 0..171]: 85.526 ms
+[worker 2/7 rows 342..513]: 39.868 ms
+[worker 6/7 rows 1026..1200]: 40.655 ms
+[worker 4/7 rows 684..855]: 43.736 ms
+[worker 5/7 rows 855..1026]: 47.225 ms
+[worker 3/7 rows 513..684]: 48.216 ms
+[worker 1/7 rows 171..342]: 53.785 ms
+[worker 0/7 rows 0..171]: 88.240 ms
+[worker 6/7 rows 1026..1200]: 39.847 ms
+[worker 2/7 rows 342..513]: 42.083 ms
+[worker 4/7 rows 684..855]: 43.055 ms
+[worker 5/7 rows 855..1026]: 46.006 ms
+[worker 3/7 rows 513..684]: 49.695 ms
+[worker 1/7 rows 171..342]: 55.306 ms
+[worker 0/7 rows 0..171]: 88.740 ms
+[worker 6/7 rows 1026..1200]: 41.616 ms
+[worker 4/7 rows 684..855]: 43.489 ms
+[worker 2/7 rows 342..513]: 43.815 ms
+[worker 5/7 rows 855..1026]: 45.221 ms
+[worker 3/7 rows 513..684]: 49.996 ms
+[worker 1/7 rows 171..342]: 56.265 ms
+[worker 0/7 rows 0..171]: 91.657 ms
+[worker 6/7 rows 1026..1200]: 41.920 ms
+[worker 4/7 rows 684..855]: 45.130 ms
+[worker 2/7 rows 342..513]: 45.626 ms
+[worker 5/7 rows 855..1026]: 45.413 ms
+[worker 3/7 rows 513..684]: 50.923 ms
+[worker 1/7 rows 171..342]: 57.314 ms
+[worker 0/7 rows 0..171]: 94.081 ms
+[mandelbrot thread]:		[86.136] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.42x speedup from 7 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[291.354] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 6/7 rows 1026..1200]: 37.282 ms
+[worker 2/7 rows 342..513]: 38.962 ms
+[worker 5/7 rows 855..1026]: 41.189 ms
+[worker 4/7 rows 684..855]: 41.686 ms
+[worker 3/7 rows 513..684]: 45.327 ms
+[worker 1/7 rows 171..342]: 52.450 ms
+[worker 0/7 rows 0..171]: 85.951 ms
+[worker 2/7 rows 342..513]: 39.705 ms
+[worker 6/7 rows 1026..1200]: 39.895 ms
+[worker 4/7 rows 684..855]: 41.980 ms
+[worker 5/7 rows 855..1026]: 44.582 ms
+[worker 3/7 rows 513..684]: 48.249 ms
+[worker 1/7 rows 171..342]: 52.959 ms
+[worker 0/7 rows 0..171]: 85.718 ms
+[worker 2/7 rows 342..513]: 40.479 ms
+[worker 6/7 rows 1026..1200]: 40.811 ms
+[worker 4/7 rows 684..855]: 43.224 ms
+[worker 5/7 rows 855..1026]: 46.263 ms
+[worker 3/7 rows 513..684]: 48.828 ms
+[worker 1/7 rows 171..342]: 54.801 ms
+[worker 0/7 rows 0..171]: 91.982 ms
+[worker 2/7 rows 342..513]: 41.450 ms
+[worker 6/7 rows 1026..1200]: 42.880 ms
+[worker 5/7 rows 855..1026]: 45.734 ms
+[worker 4/7 rows 684..855]: 46.684 ms
+[worker 3/7 rows 513..684]: 52.876 ms
+[worker 1/7 rows 171..342]: 55.335 ms
+[worker 0/7 rows 0..171]: 94.175 ms
+[worker 6/7 rows 1026..1200]: 43.291 ms
+[worker 2/7 rows 342..513]: 44.657 ms
+[worker 4/7 rows 684..855]: 46.087 ms
+[worker 5/7 rows 855..1026]: 47.584 ms
+[worker 3/7 rows 513..684]: 52.709 ms
+[worker 1/7 rows 171..342]: 59.081 ms
+[worker 0/7 rows 0..171]: 96.877 ms
+[mandelbrot thread]:		[86.340] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.37x speedup from 7 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[303.744] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/7 rows 342..513]: 37.124 ms
+[worker 6/7 rows 1026..1200]: 37.612 ms
+[worker 5/7 rows 855..1026]: 39.317 ms
+[worker 4/7 rows 684..855]: 39.622 ms
+[worker 3/7 rows 513..684]: 43.821 ms
+[worker 1/7 rows 171..342]: 49.425 ms
+[worker 0/7 rows 0..171]: 78.332 ms
+[worker 6/7 rows 1026..1200]: 39.013 ms
+[worker 2/7 rows 342..513]: 41.403 ms
+[worker 4/7 rows 684..855]: 43.064 ms
+[worker 5/7 rows 855..1026]: 46.813 ms
+[worker 3/7 rows 513..684]: 47.597 ms
+[worker 1/7 rows 171..342]: 55.283 ms
+[worker 0/7 rows 0..171]: 87.845 ms
+[worker 2/7 rows 342..513]: 39.678 ms
+[worker 6/7 rows 1026..1200]: 42.343 ms
+[worker 4/7 rows 684..855]: 44.686 ms
+[worker 5/7 rows 855..1026]: 46.374 ms
+[worker 3/7 rows 513..684]: 51.285 ms
+[worker 1/7 rows 171..342]: 55.886 ms
+[worker 0/7 rows 0..171]: 93.134 ms
+[worker 2/7 rows 342..513]: 40.874 ms
+[worker 6/7 rows 1026..1200]: 40.668 ms
+[worker 4/7 rows 684..855]: 44.646 ms
+[worker 5/7 rows 855..1026]: 47.002 ms
+[worker 3/7 rows 513..684]: 51.167 ms
+[worker 1/7 rows 171..342]: 55.761 ms
+[worker 0/7 rows 0..171]: 95.082 ms
+[worker 2/7 rows 342..513]: 42.452 ms
+[worker 6/7 rows 1026..1200]: 42.845 ms
+[worker 4/7 rows 684..855]: 43.151 ms
+[worker 5/7 rows 855..1026]: 48.057 ms
+[worker 3/7 rows 513..684]: 52.909 ms
+[worker 1/7 rows 171..342]: 58.062 ms
+[worker 0/7 rows 0..171]: 93.743 ms
+[mandelbrot thread]:		[79.012] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.84x speedup from 7 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[332.106] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 6/7 rows 1026..1200]: 43.514 ms
+[worker 2/7 rows 342..513]: 46.094 ms
+[worker 4/7 rows 684..855]: 49.127 ms
+[worker 5/7 rows 855..1026]: 51.860 ms
+[worker 3/7 rows 513..684]: 53.836 ms
+[worker 1/7 rows 171..342]: 61.872 ms
+[worker 0/7 rows 0..171]: 99.102 ms
+[worker 6/7 rows 1026..1200]: 44.701 ms
+[worker 4/7 rows 684..855]: 50.628 ms
+[worker 2/7 rows 342..513]: 52.410 ms
+[worker 5/7 rows 855..1026]: 57.529 ms
+[worker 3/7 rows 513..684]: 58.671 ms
+[worker 1/7 rows 171..342]: 63.521 ms
+[worker 0/7 rows 0..171]: 99.562 ms
+[worker 6/7 rows 1026..1200]: 43.814 ms
+[worker 2/7 rows 342..513]: 45.327 ms
+[worker 4/7 rows 684..855]: 45.626 ms
+[worker 5/7 rows 855..1026]: 49.161 ms
+[worker 3/7 rows 513..684]: 53.058 ms
+[worker 1/7 rows 171..342]: 59.285 ms
+[worker 0/7 rows 0..171]: 95.376 ms
+[worker 6/7 rows 1026..1200]: 43.837 ms
+[worker 2/7 rows 342..513]: 45.849 ms
+[worker 4/7 rows 684..855]: 45.923 ms
+[worker 5/7 rows 855..1026]: 48.592 ms
+[worker 3/7 rows 513..684]: 53.362 ms
+[worker 1/7 rows 171..342]: 59.750 ms
+[worker 0/7 rows 0..171]: 102.283 ms
+[worker 6/7 rows 1026..1200]: 46.193 ms
+[worker 4/7 rows 684..855]: 48.451 ms
+[worker 2/7 rows 342..513]: 49.403 ms
+[worker 5/7 rows 855..1026]: 51.254 ms
+[worker 3/7 rows 513..684]: 58.153 ms
+[worker 1/7 rows 171..342]: 65.732 ms
+[worker 0/7 rows 0..171]: 99.827 ms
+[mandelbrot thread]:		[96.200] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.45x speedup from 7 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[333.566] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 6/7 rows 1026..1200]: 34.578 ms
+[worker 4/7 rows 684..855]: 35.728 ms
+[worker 2/7 rows 342..513]: 37.533 ms
+[worker 5/7 rows 855..1026]: 38.838 ms
+[worker 3/7 rows 513..684]: 43.704 ms
+[worker 1/7 rows 171..342]: 48.985 ms
+[worker 0/7 rows 0..171]: 80.086 ms
+[worker 6/7 rows 1026..1200]: 35.778 ms
+[worker 2/7 rows 342..513]: 39.277 ms
+[worker 4/7 rows 684..855]: 39.814 ms
+[worker 3/7 rows 513..684]: 43.450 ms
+[worker 5/7 rows 855..1026]: 43.487 ms
+[worker 1/7 rows 171..342]: 51.430 ms
+[worker 0/7 rows 0..171]: 83.936 ms
+[worker 6/7 rows 1026..1200]: 38.123 ms
+[worker 2/7 rows 342..513]: 40.421 ms
+[worker 4/7 rows 684..855]: 41.971 ms
+[worker 5/7 rows 855..1026]: 45.597 ms
+[worker 3/7 rows 513..684]: 49.579 ms
+[worker 1/7 rows 171..342]: 54.309 ms
+[worker 0/7 rows 0..171]: 89.052 ms
+[worker 6/7 rows 1026..1200]: 39.818 ms
+[worker 4/7 rows 684..855]: 42.431 ms
+[worker 2/7 rows 342..513]: 43.846 ms
+[worker 5/7 rows 855..1026]: 44.526 ms
+[worker 3/7 rows 513..684]: 50.761 ms
+[worker 1/7 rows 171..342]: 54.753 ms
+[worker 0/7 rows 0..171]: 97.775 ms
+[worker 6/7 rows 1026..1200]: 43.208 ms
+[worker 2/7 rows 342..513]: 45.962 ms
+[worker 4/7 rows 684..855]: 47.026 ms
+[worker 5/7 rows 855..1026]: 49.833 ms
+[worker 3/7 rows 513..684]: 52.018 ms
+[worker 1/7 rows 171..342]: 57.740 ms
+[worker 0/7 rows 0..171]: 96.920 ms
+[mandelbrot thread]:		[80.753] ms
+Wrote image file mandelbrot-thread.ppm
+				(4.13x speedup from 7 threads)
+
+------- threads = 8 -------
+--- invocation 1 ---
+[mandelbrot serial]:		[291.292] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 7/8 rows 1050..1200]: 29.216 ms
+[worker 2/8 rows 300..450]: 33.424 ms
+[worker 3/8 rows 450..600]: 35.925 ms
+[worker 4/8 rows 600..750]: 36.819 ms
+[worker 6/8 rows 900..1050]: 36.858 ms
+[worker 5/8 rows 750..900]: 37.937 ms
+[worker 1/8 rows 150..300]: 47.200 ms
+[worker 0/8 rows 0..150]: 74.027 ms
+[worker 7/8 rows 1050..1200]: 33.343 ms
+[worker 5/8 rows 750..900]: 35.840 ms
+[worker 4/8 rows 600..750]: 38.452 ms
+[worker 2/8 rows 300..450]: 38.963 ms
+[worker 3/8 rows 450..600]: 38.957 ms
+[worker 6/8 rows 900..1050]: 40.822 ms
+[worker 1/8 rows 150..300]: 52.430 ms
+[worker 0/8 rows 0..150]: 77.960 ms
+[worker 5/8 rows 750..900]: 37.602 ms
+[worker 2/8 rows 300..450]: 39.963 ms
+[worker 4/8 rows 600..750]: 42.922 ms
+[worker 6/8 rows 900..1050]: 42.748 ms
+[worker 7/8 rows 1050..1200]: 45.039 ms
+[worker 3/8 rows 450..600]: 49.476 ms
+[worker 1/8 rows 150..300]: 56.050 ms
+[worker 0/8 rows 0..150]: 96.306 ms
+[worker 7/8 rows 1050..1200]: 36.123 ms
+[worker 5/8 rows 750..900]: 39.378 ms
+[worker 2/8 rows 300..450]: 40.541 ms
+[worker 3/8 rows 450..600]: 41.060 ms
+[worker 6/8 rows 900..1050]: 45.500 ms
+[worker 4/8 rows 600..750]: 45.870 ms
+[worker 1/8 rows 150..300]: 55.426 ms
+[worker 0/8 rows 0..150]: 82.946 ms
+[worker 7/8 rows 1050..1200]: 36.277 ms
+[worker 5/8 rows 750..900]: 40.463 ms
+[worker 2/8 rows 300..450]: 41.389 ms
+[worker 3/8 rows 450..600]: 42.890 ms
+[worker 6/8 rows 900..1050]: 45.534 ms
+[worker 4/8 rows 600..750]: 45.781 ms
+[worker 1/8 rows 150..300]: 56.722 ms
+[worker 0/8 rows 0..150]: 85.770 ms
+[mandelbrot thread]:		[74.710] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.90x speedup from 8 threads)
+--- invocation 2 ---
+[mandelbrot serial]:		[296.638] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 7/8 rows 1050..1200]: 33.222 ms
+[worker 2/8 rows 300..450]: 36.829 ms
+[worker 5/8 rows 750..900]: 36.990 ms
+[worker 3/8 rows 450..600]: 40.894 ms
+[worker 6/8 rows 900..1050]: 41.673 ms
+[worker 4/8 rows 600..750]: 44.304 ms
+[worker 1/8 rows 150..300]: 55.125 ms
+[worker 0/8 rows 0..150]: 79.602 ms
+[worker 7/8 rows 1050..1200]: 35.347 ms
+[worker 5/8 rows 750..900]: 37.321 ms
+[worker 2/8 rows 300..450]: 41.506 ms
+[worker 4/8 rows 600..750]: 41.988 ms
+[worker 3/8 rows 450..600]: 42.141 ms
+[worker 6/8 rows 900..1050]: 43.808 ms
+[worker 1/8 rows 150..300]: 53.555 ms
+[worker 0/8 rows 0..150]: 82.503 ms
+[worker 7/8 rows 1050..1200]: 33.507 ms
+[worker 5/8 rows 750..900]: 39.064 ms
+[worker 2/8 rows 300..450]: 42.230 ms
+[worker 3/8 rows 450..600]: 43.774 ms
+[worker 4/8 rows 600..750]: 44.804 ms
+[worker 6/8 rows 900..1050]: 44.879 ms
+[worker 1/8 rows 150..300]: 59.346 ms
+[worker 0/8 rows 0..150]: 85.241 ms
+[worker 7/8 rows 1050..1200]: 35.812 ms
+[worker 5/8 rows 750..900]: 40.321 ms
+[worker 2/8 rows 300..450]: 40.686 ms
+[worker 4/8 rows 600..750]: 42.981 ms
+[worker 3/8 rows 450..600]: 44.097 ms
+[worker 6/8 rows 900..1050]: 46.410 ms
+[worker 1/8 rows 150..300]: 55.534 ms
+[worker 0/8 rows 0..150]: 86.313 ms
+[worker 7/8 rows 1050..1200]: 38.152 ms
+[worker 5/8 rows 750..900]: 40.994 ms
+[worker 2/8 rows 300..450]: 41.515 ms
+[worker 4/8 rows 600..750]: 44.417 ms
+[worker 3/8 rows 450..600]: 45.568 ms
+[worker 6/8 rows 900..1050]: 47.194 ms
+[worker 1/8 rows 150..300]: 57.306 ms
+[worker 0/8 rows 0..150]: 86.983 ms
+[mandelbrot thread]:		[80.291] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.69x speedup from 8 threads)
+--- invocation 3 ---
+[mandelbrot serial]:		[292.147] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/8 rows 300..450]: 34.706 ms
+[worker 5/8 rows 750..900]: 34.798 ms
+[worker 7/8 rows 1050..1200]: 35.867 ms
+[worker 4/8 rows 600..750]: 37.138 ms
+[worker 6/8 rows 900..1050]: 37.242 ms
+[worker 3/8 rows 450..600]: 42.624 ms
+[worker 1/8 rows 150..300]: 49.520 ms
+[worker 0/8 rows 0..150]: 75.576 ms
+[worker 7/8 rows 1050..1200]: 31.661 ms
+[worker 2/8 rows 300..450]: 36.297 ms
+[worker 5/8 rows 750..900]: 38.893 ms
+[worker 3/8 rows 450..600]: 41.212 ms
+[worker 4/8 rows 600..750]: 41.315 ms
+[worker 6/8 rows 900..1050]: 41.334 ms
+[worker 1/8 rows 150..300]: 53.730 ms
+[worker 0/8 rows 0..150]: 78.463 ms
+[worker 7/8 rows 1050..1200]: 35.121 ms
+[worker 2/8 rows 300..450]: 39.914 ms
+[worker 5/8 rows 750..900]: 40.195 ms
+[worker 4/8 rows 600..750]: 40.936 ms
+[worker 6/8 rows 900..1050]: 41.401 ms
+[worker 3/8 rows 450..600]: 44.015 ms
+[worker 1/8 rows 150..300]: 54.614 ms
+[worker 0/8 rows 0..150]: 82.430 ms
+[worker 7/8 rows 1050..1200]: 35.722 ms
+[worker 2/8 rows 300..450]: 40.794 ms
+[worker 5/8 rows 750..900]: 40.852 ms
+[worker 4/8 rows 600..750]: 42.128 ms
+[worker 6/8 rows 900..1050]: 43.365 ms
+[worker 3/8 rows 450..600]: 44.112 ms
+[worker 1/8 rows 150..300]: 58.065 ms
+[worker 0/8 rows 0..150]: 84.516 ms
+[worker 7/8 rows 1050..1200]: 35.798 ms
+[worker 2/8 rows 300..450]: 39.542 ms
+[worker 4/8 rows 600..750]: 44.824 ms
+[worker 6/8 rows 900..1050]: 46.194 ms
+[worker 5/8 rows 750..900]: 46.934 ms
+[worker 3/8 rows 450..600]: 53.184 ms
+[worker 1/8 rows 150..300]: 101.569 ms
+[worker 0/8 rows 0..150]: 120.619 ms
+[mandelbrot thread]:		[76.185] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.83x speedup from 8 threads)
+--- invocation 4 ---
+[mandelbrot serial]:		[294.972] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 7/8 rows 1050..1200]: 36.176 ms
+[worker 2/8 rows 300..450]: 37.303 ms
+[worker 4/8 rows 600..750]: 38.200 ms
+[worker 5/8 rows 750..900]: 38.700 ms
+[worker 6/8 rows 900..1050]: 41.497 ms
+[worker 3/8 rows 450..600]: 42.127 ms
+[worker 1/8 rows 150..300]: 53.126 ms
+[worker 0/8 rows 0..150]: 76.004 ms
+[worker 7/8 rows 1050..1200]: 33.820 ms
+[worker 5/8 rows 750..900]: 39.470 ms
+[worker 2/8 rows 300..450]: 41.583 ms
+[worker 3/8 rows 450..600]: 42.061 ms
+[worker 6/8 rows 900..1050]: 42.252 ms
+[worker 4/8 rows 600..750]: 42.728 ms
+[worker 1/8 rows 150..300]: 56.892 ms
+[worker 0/8 rows 0..150]: 84.344 ms
+[worker 5/8 rows 750..900]: 43.118 ms
+[worker 2/8 rows 300..450]: 45.497 ms
+[worker 3/8 rows 450..600]: 49.189 ms
+[worker 7/8 rows 1050..1200]: 48.862 ms
+[worker 6/8 rows 900..1050]: 50.987 ms
+[worker 4/8 rows 600..750]: 53.155 ms
+[worker 1/8 rows 150..300]: 59.740 ms
+[worker 0/8 rows 0..150]: 92.967 ms
+[worker 7/8 rows 1050..1200]: 37.854 ms
+[worker 2/8 rows 300..450]: 42.502 ms
+[worker 5/8 rows 750..900]: 41.655 ms
+[worker 3/8 rows 450..600]: 43.168 ms
+[worker 4/8 rows 600..750]: 45.770 ms
+[worker 6/8 rows 900..1050]: 48.824 ms
+[worker 1/8 rows 150..300]: 57.291 ms
+[worker 0/8 rows 0..150]: 89.390 ms
+[worker 7/8 rows 1050..1200]: 37.659 ms
+[worker 2/8 rows 300..450]: 41.260 ms
+[worker 5/8 rows 750..900]: 43.193 ms
+[worker 3/8 rows 450..600]: 45.260 ms
+[worker 4/8 rows 600..750]: 46.965 ms
+[worker 6/8 rows 900..1050]: 49.732 ms
+[worker 1/8 rows 150..300]: 56.551 ms
+[worker 0/8 rows 0..150]: 90.083 ms
+[mandelbrot thread]:		[76.649] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.85x speedup from 8 threads)
+--- invocation 5 ---
+[mandelbrot serial]:		[294.795] ms
+Wrote image file mandelbrot-serial.ppm
+[worker 2/8 rows 300..450]: 36.286 ms
+[worker 7/8 rows 1050..1200]: 36.341 ms
+[worker 5/8 rows 750..900]: 37.834 ms
+[worker 6/8 rows 900..1050]: 38.079 ms
+[worker 3/8 rows 450..600]: 41.789 ms
+[worker 4/8 rows 600..750]: 45.519 ms
+[worker 1/8 rows 150..300]: 51.392 ms
+[worker 0/8 rows 0..150]: 81.690 ms
+[worker 7/8 rows 1050..1200]: 34.216 ms
+[worker 2/8 rows 300..450]: 38.918 ms
+[worker 5/8 rows 750..900]: 39.726 ms
+[worker 3/8 rows 450..600]: 40.496 ms
+[worker 4/8 rows 600..750]: 41.002 ms
+[worker 6/8 rows 900..1050]: 43.180 ms
+[worker 1/8 rows 150..300]: 54.990 ms
+[worker 0/8 rows 0..150]: 79.609 ms
+[worker 7/8 rows 1050..1200]: 34.392 ms
+[worker 2/8 rows 300..450]: 39.159 ms
+[worker 3/8 rows 450..600]: 41.508 ms
+[worker 5/8 rows 750..900]: 41.548 ms
+[worker 4/8 rows 600..750]: 42.377 ms
+[worker 6/8 rows 900..1050]: 43.464 ms
+[worker 1/8 rows 150..300]: 56.288 ms
+[worker 0/8 rows 0..150]: 85.586 ms
+[worker 7/8 rows 1050..1200]: 33.549 ms
+[worker 5/8 rows 750..900]: 38.333 ms
+[worker 2/8 rows 300..450]: 39.870 ms
+[worker 3/8 rows 450..600]: 41.043 ms
+[worker 4/8 rows 600..750]: 42.948 ms
+[worker 6/8 rows 900..1050]: 43.520 ms
+[worker 1/8 rows 150..300]: 59.307 ms
+[worker 0/8 rows 0..150]: 84.327 ms
+[worker 7/8 rows 1050..1200]: 36.963 ms
+[worker 2/8 rows 300..450]: 39.420 ms
+[worker 5/8 rows 750..900]: 41.192 ms
+[worker 3/8 rows 450..600]: 43.047 ms
+[worker 4/8 rows 600..750]: 44.032 ms
+[worker 6/8 rows 900..1050]: 47.182 ms
+[worker 1/8 rows 150..300]: 58.714 ms
+[worker 0/8 rows 0..150]: 88.143 ms
+[mandelbrot thread]:		[80.311] ms
+Wrote image file mandelbrot-thread.ppm
+				(3.67x speedup from 8 threads)
