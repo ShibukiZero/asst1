@@ -752,6 +752,30 @@ from X, one element from Y, and writes one element to `result` the multiplier by
 
 **Answer:**
 
+Although the source code appears to touch only three floats per element, a
+normal cached store to `result[i]` usually creates one extra stream of memory
+traffic. The two obvious streams are the reads from `X[i]` and `Y[i]`. The
+store to `result[i]` also eventually writes the modified cache line back to
+memory.
+
+The hidden part is the cache's write-allocate behavior. If the cache line
+containing `result[i]` is not already in cache, the processor normally first
+loads that cache line into the cache and obtains ownership of it before
+modifying the float. This is often called a read-for-ownership. Later, because
+the line is dirty, it must be written back to memory.
+
+So the effective bandwidth accounting is:
+
+| Stream | Bytes per element |
+|---|---:|
+| read `X[i]` | `sizeof(float)` |
+| read `Y[i]` | `sizeof(float)` |
+| read/allocate `result[i]` cache line | `sizeof(float)` |
+| write back `result[i]` cache line | `sizeof(float)` |
+
+That gives `4 * N * sizeof(float)`, which is why the multiplier by 4 in
+`TOTAL_BYTES` is the right model for this cached implementation.
+
 ---
 
 ### Q3 (Extra Credit)
