@@ -785,3 +785,34 @@ here, not just a few percentage points. If successful, describe how you did it
 and what a best-possible implementation on these systems might achieve.
 
 **Answer:**
+
+We implemented a manual AVX2 version that uses non-temporal streaming stores
+for the output array. The goal is to avoid the normal cached-store
+write-allocate behavior described in Q2. The implementation is in
+`prog5_saxpy/saxpyStreaming.cpp`: it loads 8 aligned floats from `X` and `Y`,
+computes `scale * X + Y` with AVX2, and writes the result with
+`_mm256_stream_ps`. The arrays are allocated with 32-byte alignment using
+`posix_memalign`, which is required for the aligned AVX2 loads and streaming
+stores. The implementation also issues `_mm_sfence()` before verification so
+the streaming stores are visible before the result is read.
+
+We measured it with `scripts/bench_prog5_q3_streaming.sh`, using 5 measured
+invocations and a 60 second cooldown before each one. The raw log and parsed
+CSVs are archived in
+[`artifacts/experiments/prog5/q3_streaming/`](artifacts/experiments/prog5/q3_streaming/).
+
+| Version | Time (ms) | Bandwidth (GB/s) | GFLOPS |
+|---|---:|---:|---:|
+| ISPC no tasks | 14.388 | 21.244 | 2.851 |
+| ISPC tasks | 13.256 | 22.500 | 3.020 |
+| AVX2 streaming stores | 10.754 | 28.239 | 3.790 |
+
+The streaming-store version is 1.342x faster than the no-task ISPC version and
+also faster than the tasking ISPC version in this local run. This is a
+meaningful improvement, but it is still not close to unlimited or linear
+scaling: the kernel remains dominated by memory traffic. The best possible
+implementation on this kind of system would get close to the machine's
+sustainable streaming memory bandwidth while minimizing unnecessary cache
+traffic. Non-temporal stores help because they can avoid the read-for-ownership
+traffic for `result`, reducing the ideal traffic from four floats per element
+toward three floats per element.
