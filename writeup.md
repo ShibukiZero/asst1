@@ -233,24 +233,24 @@ Your implementation should work with any combination of input array size
 
 **Answer:**
 
-I implemented `clampedExpVector` by processing the input arrays in chunks of
-`VECTOR_WIDTH` lanes. For each chunk, I first construct a mask with
+We implemented `clampedExpVector` by processing the input arrays in chunks of
+`VECTOR_WIDTH` lanes. For each chunk, we first construct a mask with
 `_cs149_init_ones(width)`, where `width = min(VECTOR_WIDTH, N - i)`. This
 mask is important for the final chunk when `N` is not a multiple of
 `VECTOR_WIDTH`: inactive lanes are never loaded from or stored to, so the
 implementation does not read past the logical input or overwrite `output`
 beyond `N`.
 
-Within each chunk, I load the input values and exponents into vector registers.
+Within each chunk, we load the input values and exponents into vector registers.
 The result vector is initialized to `1.0`, which handles lanes whose exponent
-is zero. For lanes whose exponent is greater than zero, I move the base value
-`x` into the result and initialize a per-lane counter to `exponent - 1`. I then
+is zero. For lanes whose exponent is greater than zero, we move the base value
+`x` into the result and initialize a per-lane counter to `exponent - 1`. We then
 use a loop controlled by a mask of lanes whose counter is still positive. On
 each loop iteration, only those active lanes perform `result *= x`, and their
 counters are decremented. The loop stops when `_cs149_cntbits` reports that no
 lanes still need more multiplications.
 
-After the exponentiation loop, I compare the result against `9.999999f` and
+After the exponentiation loop, we compare the result against `9.999999f` and
 set only the lanes above that threshold to the clamp value. Finally, the result
 is stored back using the same valid-lane mask from the start of the chunk.
 
@@ -269,7 +269,7 @@ increase, decrease or stay the same as `VECTOR_WIDTH` changes? Why?
 
 **Answer:**
 
-I swept `VECTOR_WIDTH` from 2 to 16 using `./myexp -s 10000`. The run was
+We swept `VECTOR_WIDTH` from 2 to 16 using `./myexp -s 10000`. The run was
 automated with `scripts/bench_prog2_widths.sh`, which temporarily changes the
 `VECTOR_WIDTH` definition, rebuilds the program, runs the benchmark, records
 the vector-unit statistics, and then restores the original header. The raw logs
@@ -311,14 +311,14 @@ and `interleave` operations useful.
 
 **Answer:**
 
-I implemented `arraySumVector` with a two-stage reduction. First, I keep a
+We implemented `arraySumVector` with a two-stage reduction. First, we keep a
 `VECTOR_WIDTH`-lane vector accumulator called `partialSum`, initialized to
 zero. The main loop loads `VECTOR_WIDTH` input values at a time and adds them
 into `partialSum`, so each lane accumulates a strided subset of the input
 array.
 
 After this vector accumulation phase, the remaining work is to reduce the
-lanes of `partialSum` into one scalar value. I do this with a tree-style
+lanes of `partialSum` into one scalar value. We do this with a tree-style
 horizontal reduction using `_cs149_hadd_float` and `_cs149_interleave_float`.
 Each `_cs149_hadd_float` combines adjacent pairs of lanes, and
 `_cs149_interleave_float` rearranges the intermediate sums so that the next
@@ -328,7 +328,7 @@ the final sum is available in `partialSum.value[0]`.
 
 The resulting structure is `N / VECTOR_WIDTH` vector additions for the main
 accumulation plus `log2(VECTOR_WIDTH)` horizontal-reduction rounds. This
-matches the intended asymptotic target for the extra credit. I verified the
+matches the intended asymptotic target for the extra credit. We verified the
 implementation in WSL with both `./myexp` and `./myexp -s 10000`; in both
 runs, the required clamped exponent test and the array-sum extra credit test
 passed.
@@ -356,7 +356,7 @@ that the machine has roughly comparable scalar and 8-wide vector floating-point
 throughput. That ideal requires all eight SIMD lanes in a gang to stay useful
 for the same amount of time.
 
-I measured both views with `scripts/bench_prog3_part1_part2.sh`: each
+We measured both views with `scripts/bench_prog3_part1_part2.sh`: each
 configuration used a 60 second cooldown and 5 measured invocations, and each
 invocation still used the program's built-in minimum of 3 timing repetitions.
 The raw log and parsed CSVs are archived in
@@ -431,7 +431,7 @@ work best?
 
 **Answer:**
 
-I swept task counts by temporarily changing `rowsPerTask = height / T` and
+We swept task counts by temporarily changing `rowsPerTask = height / T` and
 `launch[T]` in `mandelbrot_ispc_withtasks()`, rebuilding, and running
 `./mandelbrot_ispc --tasks`. The sweep used 5 measured invocations per task
 count and only considered task counts that evenly divide the 800 image rows.
@@ -468,7 +468,7 @@ and many tasks are scheduled across multiple cores. The overall speedup is
 therefore roughly "SIMD speedup times multicore task speedup", not just the
 number of cores.
 
-I would choose 40 tasks for this local run because it had the lowest mean task
+We would choose 40 tasks for this local run because it had the lowest mean task
 runtime in the sweep, 8.107 ms. The highest speedup ratio was at 25 tasks, but
 that ratio depends on the serial baseline measured in the same invocations,
 which was somewhat noisy. In absolute task runtime, 25, 40, 50, and 100 tasks
@@ -505,11 +505,11 @@ create more tasks than cores: the extra tasks give the runtime scheduling
 flexibility and help load balance irregular work, without requiring one OS
 thread per task.
 
-If I launch 10,000 ISPC tasks, I would expect the runtime to enqueue many
+If we launch 10,000 ISPC tasks, we would expect the runtime to enqueue many
 small work items and execute them using its existing worker threads. There is
 still overhead, and tasks that are too tiny can spend too much time in the
 scheduler, but this is a plausible way to express fine-grained parallel work.
-If I launch 10,000 `std::thread`s, the program asks the OS to create 10,000
+If we launch 10,000 `std::thread`s, the program asks the OS to create 10,000
 full execution contexts. That can consume a large amount of memory for stacks,
 put heavy pressure on the OS scheduler, cause many context switches and
 cache/TLB disruptions, and may even hit system limits.
@@ -536,7 +536,7 @@ parallelization?
 
 **Answer:**
 
-I measured the starter random-input baseline with `scripts/bench_prog4_q1.sh`.
+We measured the starter random-input baseline with `scripts/bench_prog4_q1.sh`.
 The script rebuilds `prog4_sqrt` and runs `./sqrt` 5 times, with a 60 second
 cooldown before each measured invocation. Each invocation still uses the
 program's built-in minimum of 3 timing repetitions. The raw log and parsed
@@ -571,7 +571,7 @@ benefit of moving from ISPC without tasks to ISPC with tasks? Explain why.
 
 **Answer:**
 
-I used an input where every element is the same slow in-range value:
+We used an input where every element is the same slow in-range value:
 
 ```cpp
 values[i] = 2.999f;
@@ -580,7 +580,7 @@ values[i] = 2.999f;
 This value is near the upper end of the starter input range. A small iteration
 count check showed that `2.999f` needs 22 Newton iterations from
 `initialGuess = 1.0f`, more than the other checked constants, so it creates a
-large amount of uniform work. I measured it with
+large amount of uniform work. We measured it with
 `scripts/bench_prog4_q2_all_2999.sh`, using 5 measured invocations and a 60
 second cooldown before each one. The raw log and parsed CSVs are archived in
 [`artifacts/experiments/prog4/q2_all_2999/`](artifacts/experiments/prog4/q2_all_2999/).
@@ -615,7 +615,7 @@ that the ISPC target is AVX2, which generates 8-wide SIMD instructions.
 
 **Answer:**
 
-I used one slow value per 8-wide AVX2 gang:
+We used one slow value per 8-wide AVX2 gang:
 
 ```cpp
 values[i] = (i % 8 == 0) ? 2.999f : 1.0f;
@@ -626,7 +626,7 @@ Newton loop exits immediately. `2.999f` is the slow in-range value used in Q2.
 This pattern is more extreme than a simple 4-fast/4-slow alternation: every
 gang still contains a slow lane, so SIMD execution time stays close to the
 all-slow case, but 7 of the 8 scalar elements are fast, which makes the serial
-baseline much faster. I measured this case with
+baseline much faster. We measured this case with
 `scripts/bench_prog4_q3_one_slow_per_gang.sh`, again using 5 measured
 invocations and a 60 second cooldown before each one. The raw log and parsed
 CSVs are archived in
@@ -663,7 +663,7 @@ should be nearly as fast as, or faster than, the binary produced by ISPC.
 
 **Answer:**
 
-I added a manual AVX2 implementation in `prog4_sqrt/sqrtAVX2.cpp` and wired it
+We added a manual AVX2 implementation in `prog4_sqrt/sqrtAVX2.cpp` and wired it
 into `prog4_sqrt/main.cpp` and the Makefile. The implementation processes 8
 `float` values at a time using `__m256`, matching the AVX2 width used by the
 ISPC target. It computes the same Newton iteration as the serial and ISPC
@@ -683,7 +683,7 @@ The blend keeps inactive lanes unchanged after they have converged, while lanes
 whose error is still above the threshold continue iterating. This is the manual
 AVX2 equivalent of the masked SPMD loop that ISPC generates.
 
-I measured the starter random input with `scripts/bench_prog4_q4_avx2.sh`,
+We measured the starter random input with `scripts/bench_prog4_q4_avx2.sh`,
 using 5 measured invocations and a 60 second cooldown before each one. The raw
 log and parsed CSVs are archived in
 [`artifacts/experiments/prog4/q4_avx2/`](artifacts/experiments/prog4/q4_avx2/).
@@ -699,3 +699,65 @@ The manual AVX2 version is faster than the no-task ISPC version on this run:
 its runtime is 0.755x the ISPC runtime, or about 1.32x faster. It is still much
 slower than the tasking ISPC version because this AVX2 implementation only uses
 SIMD parallelism on one core; it does not add multi-core task parallelism.
+
+---
+
+## Program 5: BLAS `saxpy`
+
+### Q1
+
+Compile and run `saxpy`. The program will report the performance of ISPC
+(without tasks) and ISPC (with tasks) implementations of saxpy. What speedup
+from using ISPC with tasks do you observe? Explain the performance of this
+program. Do you think it can be substantially improved? (For example, could you
+rewrite the code to achieve near linear speedup? Yes or No? Please justify your
+answer.)
+
+**Answer:**
+
+We measured Program 5 with `scripts/bench_prog5_q1.sh`, using 5 measured
+invocations and a 60 second cooldown before each one. Each invocation still
+uses the program's built-in minimum of three timings. The raw log and parsed
+CSVs are archived in
+[`artifacts/experiments/prog5/q1_baseline/`](artifacts/experiments/prog5/q1_baseline/).
+
+| Version | Time (ms) | Bandwidth (GB/s) | GFLOPS |
+|---|---:|---:|---:|
+| ISPC no tasks | 15.138 | 20.305 | 2.725 |
+| ISPC tasks | 12.886 | 23.308 | 3.128 |
+
+The observed speedup from using tasks is only 1.166x. This is much smaller
+than the speedups in the compute-heavy programs because `saxpy` has very low
+arithmetic intensity: for each element it performs only one multiply and one
+add, but it must stream through large arrays. The reported bandwidth rises only
+from 20.305 GB/s to 23.308 GB/s when tasks are enabled, so the task version is
+mostly limited by memory bandwidth rather than by the number of available CPU
+cores or SIMD lanes.
+
+We do not think this implementation can be rewritten to achieve near-linear
+speedup on this machine. The computation is already regular, balanced, and easy
+to vectorize, so the remaining bottleneck is moving data between memory and the
+cores. Adding more tasks can help only until the memory system is saturated;
+after that, more parallel workers mainly compete for the same bandwidth instead
+of increasing useful throughput.
+
+---
+
+### Q2 (Extra Credit)
+
+Note that the total memory bandwidth consumed computation in `main.cpp` is
+`TOTAL_BYTES = 4 * N * sizeof(float);`. Even though `saxpy` loads one element
+from X, one element from Y, and writes one element to `result` the multiplier by
+4 is correct. Why is this the case? (Hint, think about how CPU caches work.)
+
+**Answer:**
+
+---
+
+### Q3 (Extra Credit)
+
+Improve the performance of `saxpy`. We're looking for a significant speedup
+here, not just a few percentage points. If successful, describe how you did it
+and what a best-possible implementation on these systems might achieve.
+
+**Answer:**
