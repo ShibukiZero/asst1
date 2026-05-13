@@ -893,6 +893,30 @@ most of the time being spent in the code?
 
 **Answer:**
 
+Timers were added around the three major phases in the `kMeansThread` loop:
+`computeAssignments`, `computeCentroids`, and `computeCost`. The run used the
+same starter-code-generated `data.dat` as Q1/Q2. The raw profiling output is
+archived in
+[`artifacts/experiments/prog6/q3_profile/`](artifacts/experiments/prog6/q3_profile/).
+
+| Region | Time (ms) | Share |
+|---|---:|---:|
+| `computeAssignments` | 9993.753 | 68.9% |
+| `computeCentroids` | 1566.253 | 10.8% |
+| `computeCost` | 2947.824 | 20.3% |
+
+The program ran 24 K-means iterations. Most of the time is spent in
+`computeAssignments`, which accounts for about 69% of the profiled runtime.
+This matches the loop structure: for each iteration, assignment compares every
+one of the `M=1000000` points against all `K=3` centroids, and each distance
+calculation scans `N=100` dimensions. `computeCost` also calls `dist`, but it
+only computes the distance to each point's assigned centroid, so it has less
+work than the assignment phase.
+
+This profiling result points to `computeAssignments` as the best optimization
+target under the assignment rule that only one of the major functions may be
+parallelized.
+
 ---
 
 ### Q4
@@ -914,3 +938,60 @@ Constraints:
   `computeCost` may be parallelized.
 
 **Answer:**
+
+Based on the Q3 profiling, `computeAssignments` was parallelized across the
+data-point dimension `m`. The implementation hard-codes 8 worker threads. Each
+thread receives a contiguous range of data points and, for each point in its
+range, computes the distance to all `K` centroids and writes that point's
+`clusterAssignments[m]`. Since each thread owns a disjoint set of assignment
+indices, no locks are needed.
+
+The important loop structure changed from the starter's centroid-major pass to
+a point-major pass:
+
+```cpp
+for (int m = args->start; m < args->end; m++) {
+    double minDist = 1e30;
+    int bestAssignment = -1;
+
+    for (int k = 0; k < args->K; k++) {
+        double d = dist(&args->data[m * args->N],
+                        &args->clusterCentroids[k * args->N], args->N);
+        if (d < minDist) {
+            minDist = d;
+            bestAssignment = k;
+        }
+    }
+
+    args->clusterAssignments[m] = bestAssignment;
+}
+```
+
+`kMeansThread` creates 8 `std::thread` workers each iteration, splits
+`M=1000000` points evenly across them, joins the workers, and then runs
+`computeCentroids` and `computeCost` unchanged. This preserves correctness
+because every point still compares against every centroid, but the independent
+point assignments are done in parallel.
+
+The optimized run is archived in
+[`artifacts/experiments/prog6/q4_parallel_assignments/`](artifacts/experiments/prog6/q4_parallel_assignments/).
+
+| Version | Total time (ms) | Speedup |
+|---|---:|---:|
+| Starter baseline | 19673.032 | 1.000x |
+| Parallel `computeAssignments` | 7878.379 | 2.497x |
+
+The result exceeds the requested 2.1x speedup target. A post-optimization
+profiling run is archived in
+[`artifacts/experiments/prog6/q4_profile_after/`](artifacts/experiments/prog6/q4_profile_after/).
+It shows the expected bottleneck shift:
+
+| Region | Before optimization | After optimization |
+|---|---:|---:|
+| `computeAssignments` | 9993.753 ms (68.9%) | 1803.601 ms (27.0%) |
+| `computeCentroids` | 1566.253 ms (10.8%) | 1670.920 ms (25.0%) |
+| `computeCost` | 2947.824 ms (20.3%) | 3206.972 ms (48.0%) |
+
+After assignment is sped up, `computeCost` becomes the largest remaining stage.
+This explains why the total speedup is strong but not close to 8x: only the
+assignment phase was parallelized, while the other phases still run serially.
