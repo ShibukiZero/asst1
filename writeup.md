@@ -833,6 +833,27 @@ reports the total runtime of the algorithm on the data.
 
 **Answer:**
 
+The Stanford AFS dataset was not available in the local WSL environment, so the
+dataset was generated from the starter C++ generation code in
+`prog6_kmeans/main.cpp`. Specifically, the temporarily enabled starter block
+called `initData`, `initCentroids`, initialized assignments using `dist`, and
+wrote `prog6_kmeans/data.dat` with `writeData`. The generated dataset used
+`M=1000000`, `N=100`, `K=3`, and `epsilon=0.1`, and the resulting file was
+about 767 MiB. The raw output and Q1/Q2 artifacts are archived in
+[`artifacts/experiments/prog6/q1_q2_baseline/`](artifacts/experiments/prog6/q1_q2_baseline/).
+
+The baseline run produced:
+
+```text
+Reading data.dat...
+Running K-means with: M=1000000, N=100, K=3, epsilon=0.100000
+[Total Time]: 19673.032 ms
+```
+
+The starter-generated data gives a baseline runtime of about 19.7 seconds on
+this local WSL machine. Subsequent optimization measurements should use this
+same `data.dat` file for apples-to-apples comparison.
+
 ---
 
 ### Q2
@@ -845,6 +866,21 @@ appear assigned to the closest centroid in the 2-D visualization, because the
 100-dimensional points are projected down to 2-D using PCA.
 
 **Answer:**
+
+The plotting dependencies were installed in a local WSL virtual environment
+under `prog6_kmeans/.venv`, and `python3 plot.py` completed successfully after
+running `kmeans`. The generated `start.log`, `end.log`, `start.png`, and
+`end.png` files are archived in
+[`artifacts/experiments/prog6/q1_q2_baseline/`](artifacts/experiments/prog6/q1_q2_baseline/).
+
+The generated plots look reasonable. The starting plot shows the initial
+cluster assignments and centroids before the K-means iterations, while the end
+plot shows the post-iteration assignments after convergence. Since the
+visualization projects 100-dimensional data down to 2-D using PCA, the plot is
+only a sanity check: a point that does not look closest to its centroid in the
+2-D image can still be correctly assigned in the original 100-dimensional
+space. Overall, the completed plots indicate that the starter pipeline ran
+successfully and produced plausible clustering output.
 
 ---
 
