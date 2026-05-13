@@ -65,27 +65,21 @@ double dist(double *x, double *y, int nDim) {
  * Assigns each data point to its "closest" cluster centroid.
  */
 void computeAssignments(WorkerArgs *const args) {
-  double *minDist = new double[args->M];
-  
-  // Initialize arrays
-  for (int m =0; m < args->M; m++) {
-    minDist[m] = 1e30;
-    args->clusterAssignments[m] = -1;
-  }
+  for (int m = args->start; m < args->end; m++) {
+    double minDist = 1e30;
+    int bestAssignment = -1;
 
-  // Assign datapoints to closest centroids
-  for (int k = args->start; k < args->end; k++) {
-    for (int m = 0; m < args->M; m++) {
+    for (int k = 0; k < args->K; k++) {
       double d = dist(&args->data[m * args->N],
                       &args->clusterCentroids[k * args->N], args->N);
-      if (d < minDist[m]) {
-        minDist[m] = d;
-        args->clusterAssignments[m] = k;
+      if (d < minDist) {
+        minDist = d;
+        bestAssignment = k;
       }
     }
-  }
 
-  delete[] minDist;
+    args->clusterAssignments[m] = bestAssignment;
+  }
 }
 
 /**
@@ -203,11 +197,23 @@ void kMeansThread(double *data, double *clusterCentroids, int *clusterAssignment
       prevCost[k] = currCost[k];
     }
 
-    // Setup args struct
+    const int numThreads = 8;
+    thread workers[numThreads];
+    WorkerArgs threadArgs[numThreads];
+
+    int pointsPerThread = (M + numThreads - 1) / numThreads;
+    for (int i = 0; i < numThreads; i++) {
+      threadArgs[i] = args;
+      threadArgs[i].start = min(i * pointsPerThread, M);
+      threadArgs[i].end = min((i + 1) * pointsPerThread, M);
+      workers[i] = thread(computeAssignments, &threadArgs[i]);
+    }
+    for (int i = 0; i < numThreads; i++) {
+      workers[i].join();
+    }
+
     args.start = 0;
     args.end = K;
-
-    computeAssignments(&args);
     computeCentroids(&args);
     computeCost(&args);
 
