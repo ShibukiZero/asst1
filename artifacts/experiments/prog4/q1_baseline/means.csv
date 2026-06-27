@@ -1,2 +1,0 @@
-runs,mean_serial_ms,mean_ispc_ms,mean_task_ms,mean_ispc_speedup,mean_task_speedup,mean_task_over_ispc
-5,791.040,193.502,30.804,4.090,25.820,6.315

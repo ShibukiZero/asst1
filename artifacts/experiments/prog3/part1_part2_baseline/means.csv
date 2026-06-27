@@ -1,5 +1,0 @@
-view,mode,runs,mean_serial_ms,mean_ispc_ms,mean_task_ms,mean_ispc_speedup,mean_task_speedup,mean_task_over_ispc
-1,no_tasks,5,240.755,49.633,,4.852,,
-1,tasks,5,241.241,49.268,25.599,4.898,9.426,1.925
-2,no_tasks,5,147.309,35.115,,4.198,,
-2,tasks,5,139.850,33.799,20.264,4.136,6.898,1.668

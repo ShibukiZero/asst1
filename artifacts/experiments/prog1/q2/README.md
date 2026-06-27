@@ -13,7 +13,6 @@
 
 ## Files
 
-- `view1.csv`, `view2.csv` — raw speedups per run + mean
 - `speedup_view1.png`, `speedup_view2.png` — single-view plots
 - `speedup_compare.png` — view 1 vs view 2 overlay
 

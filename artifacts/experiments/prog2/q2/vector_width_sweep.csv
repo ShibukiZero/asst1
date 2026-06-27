@@ -1,5 +1,0 @@
-vector_width,total_vector_instructions,vector_utilization,utilized_lanes,total_lanes,required_passed
-2,177724,87.2,310108,355448,yes
-4,102072,81.8,334024,408288,yes
-8,55374,79.0,350054,442992,yes
-16,28839,77.7,358668,461424,yes

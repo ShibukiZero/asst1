@@ -22,15 +22,8 @@ Running K-means with: M=1000000, N=100, K=3, epsilon=0.100000
 ```
 
 The earlier `4621.855 ms` baseline came from the local Python-generated
-substitute dataset and is superseded for Program 6 reporting. The archived raw
-log now uses the starter-code-generated dataset and reports `19673.032 ms`.
+substitute dataset and is superseded for Program 6 reporting. The
+starter-code-generated dataset reports `19673.032 ms`.
 
-Q2 artifacts:
-
-- `start.log`
-- `end.log`
-- `start.png`
-- `end.png`
-
-The generated plots completed successfully. They show the initial clustered
+The Q2 plots completed successfully. They show the initial clustered
 state and the post-K-means cluster assignments after PCA projection to 2-D.

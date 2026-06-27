@@ -15,7 +15,6 @@
 
 ## Files
 
-- `view1_speedup.csv`, `view2_speedup.csv` — raw speedups + mean
 - `compare_view1.png`, `compare_view2.png` — Q3 contiguous vs Q4 cyclic
 - `cyclic_both_views.png` — Q4 cyclic, view 1 and view 2 overlaid
 
@@ -46,4 +45,4 @@ Three things stand out compared to Q3 (contiguous):
 - For three particularly noisy configurations (view 1 N=8, view 2 N=7,
   view 2 N=8) the bench was repeated with a 20 s cooldown for 8 runs each.
   The reported mean is the trimmed mean of the middle 5 (drop highest +
-  lowest + one extra outlier on each side). The CSVs reflect those numbers.
+  lowest + one extra outlier on each side).

@@ -1,2 +1,0 @@
-runs,mean_ispc_ms,mean_ispc_gbps,mean_ispc_gflops,mean_task_ms,mean_task_gbps,mean_task_gflops,mean_task_speedup
-5,15.138,20.305,2.725,12.886,23.308,3.128,1.166

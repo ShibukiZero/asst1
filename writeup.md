@@ -233,25 +233,25 @@ Your implementation should work with any combination of input array size
 
 **Answer:**
 
-We implemented `clampedExpVector` by processing the input arrays in chunks of
-`VECTOR_WIDTH` lanes. For each chunk, we first construct a mask with
+`clampedExpVector` was implemented by processing the input arrays in chunks of
+`VECTOR_WIDTH` lanes. For each chunk, a mask is first constructed with
 `_cs149_init_ones(width)`, where `width = min(VECTOR_WIDTH, N - i)`. This
 mask is important for the final chunk when `N` is not a multiple of
 `VECTOR_WIDTH`: inactive lanes are never loaded from or stored to, so the
 implementation does not read past the logical input or overwrite `output`
 beyond `N`.
 
-Within each chunk, we load the input values and exponents into vector registers.
+Within each chunk, the input values and exponents are loaded into vector registers.
 The result vector is initialized to `1.0`, which handles lanes whose exponent
-is zero. For lanes whose exponent is greater than zero, we move the base value
-`x` into the result and initialize a per-lane counter to `exponent - 1`. We then
-use a loop controlled by a mask of lanes whose counter is still positive. On
+is zero. For lanes whose exponent is greater than zero, the base value
+`x` is moved into the result and a per-lane counter is initialized to `exponent - 1`. A
+loop controlled by a mask of lanes whose counter is still positive then runs. On
 each loop iteration, only those active lanes perform `result *= x`, and their
 counters are decremented. The loop stops when `_cs149_cntbits` reports that no
 lanes still need more multiplications.
 
-After the exponentiation loop, we compare the result against `9.999999f` and
-set only the lanes above that threshold to the clamp value. Finally, the result
+After the exponentiation loop, the result is compared against `9.999999f` and
+only the lanes above that threshold are set to the clamp value. Finally, the result
 is stored back using the same valid-lane mask from the start of the chunk.
 
 This implementation passed the required correctness tests in WSL for
@@ -269,8 +269,8 @@ increase, decrease or stay the same as `VECTOR_WIDTH` changes? Why?
 
 **Answer:**
 
-We swept `VECTOR_WIDTH` from 2 to 16 using `./myexp -s 10000`. The run was
-automated with `scripts/bench_prog2_widths.sh`, which temporarily changes the
+`VECTOR_WIDTH` was swept from 2 to 16 using `./myexp -s 10000`. The run was
+automated with a benchmark script, which temporarily changes the
 `VECTOR_WIDTH` definition, rebuilds the program, runs the benchmark, records
 the vector-unit statistics, and then restores the original header. The raw logs
 and parsed CSV are archived in
@@ -311,14 +311,14 @@ and `interleave` operations useful.
 
 **Answer:**
 
-We implemented `arraySumVector` with a two-stage reduction. First, we keep a
-`VECTOR_WIDTH`-lane vector accumulator called `partialSum`, initialized to
+`arraySumVector` was implemented with a two-stage reduction. First, a
+`VECTOR_WIDTH`-lane vector accumulator called `partialSum` is kept, initialized to
 zero. The main loop loads `VECTOR_WIDTH` input values at a time and adds them
 into `partialSum`, so each lane accumulates a strided subset of the input
 array.
 
 After this vector accumulation phase, the remaining work is to reduce the
-lanes of `partialSum` into one scalar value. We do this with a tree-style
+lanes of `partialSum` into one scalar value. This is done with a tree-style
 horizontal reduction using `_cs149_hadd_float` and `_cs149_interleave_float`.
 Each `_cs149_hadd_float` combines adjacent pairs of lanes, and
 `_cs149_interleave_float` rearranges the intermediate sums so that the next
@@ -328,8 +328,8 @@ the final sum is available in `partialSum.value[0]`.
 
 The resulting structure is `N / VECTOR_WIDTH` vector additions for the main
 accumulation plus `log2(VECTOR_WIDTH)` horizontal-reduction rounds. This
-matches the intended asymptotic target for the extra credit. We verified the
-implementation in WSL with both `./myexp` and `./myexp -s 10000`; in both
+matches the intended asymptotic target for the extra credit. The
+implementation was verified in WSL with both `./myexp` and `./myexp -s 10000`; in both
 runs, the required clamped exponent test and the array-sum extra credit test
 passed.
 
@@ -351,12 +351,12 @@ the different views of the Mandelbrot set may help confirm your hypothesis.
 
 Since this build targets `avx2-i32x8`, the ideal single-core SIMD speedup is
 about 8x: in the best case, one vector instruction performs the work of eight
-scalar lanes. The assignment handout also lets us assume, for this question,
+scalar lanes. The assignment handout also permits assuming, for this question,
 that the machine has roughly comparable scalar and 8-wide vector floating-point
 throughput. That ideal requires all eight SIMD lanes in a gang to stay useful
 for the same amount of time.
 
-We measured both views with `scripts/bench_prog3_part1_part2.sh`: each
+Both views were measured with a benchmark script: each
 configuration used a 60 second cooldown and 5 measured invocations, and each
 invocation still used the program's built-in minimum of 3 timing repetitions.
 The raw log and parsed CSVs are archived in
@@ -431,7 +431,7 @@ work best?
 
 **Answer:**
 
-We swept task counts by temporarily changing `rowsPerTask = height / T` and
+Task counts were swept by temporarily changing `rowsPerTask = height / T` and
 `launch[T]` in `mandelbrot_ispc_withtasks()`, rebuilding, and running
 `./mandelbrot_ispc --tasks`. The sweep used 5 measured invocations per task
 count and only considered task counts that evenly divide the 800 image rows.
@@ -468,7 +468,7 @@ and many tasks are scheduled across multiple cores. The overall speedup is
 therefore roughly "SIMD speedup times multicore task speedup", not just the
 number of cores.
 
-We would choose 40 tasks for this local run because it had the lowest mean task
+40 tasks would be the choice for this local run because it had the lowest mean task
 runtime in the sweep, 8.107 ms. The highest speedup ratio was at 25 tasks, but
 that ratio depends on the serial baseline measured in the same invocations,
 which was somewhat noisy. In absolute task runtime, 25, 40, 50, and 100 tasks
@@ -505,11 +505,11 @@ create more tasks than cores: the extra tasks give the runtime scheduling
 flexibility and help load balance irregular work, without requiring one OS
 thread per task.
 
-If we launch 10,000 ISPC tasks, we would expect the runtime to enqueue many
+Launching 10,000 ISPC tasks would be expected to make the runtime enqueue many
 small work items and execute them using its existing worker threads. There is
 still overhead, and tasks that are too tiny can spend too much time in the
 scheduler, but this is a plausible way to express fine-grained parallel work.
-If we launch 10,000 `std::thread`s, the program asks the OS to create 10,000
+Launching 10,000 `std::thread`s makes the program ask the OS to create 10,000
 full execution contexts. That can consume a large amount of memory for stacks,
 put heavy pressure on the OS scheduler, cause many context switches and
 cache/TLB disruptions, and may even hit system limits.
@@ -536,7 +536,7 @@ parallelization?
 
 **Answer:**
 
-We measured the starter random-input baseline with `scripts/bench_prog4_q1.sh`.
+The starter random-input baseline was measured with a benchmark script.
 The script rebuilds `prog4_sqrt` and runs `./sqrt` 5 times, with a 60 second
 cooldown before each measured invocation. Each invocation still uses the
 program's built-in minimum of 3 timing repetitions. The raw log and parsed
@@ -571,7 +571,7 @@ benefit of moving from ISPC without tasks to ISPC with tasks? Explain why.
 
 **Answer:**
 
-We used an input where every element is the same slow in-range value:
+The input used had every element set to the same slow in-range value:
 
 ```cpp
 values[i] = 2.999f;
@@ -580,8 +580,8 @@ values[i] = 2.999f;
 This value is near the upper end of the starter input range. A small iteration
 count check showed that `2.999f` needs 22 Newton iterations from
 `initialGuess = 1.0f`, more than the other checked constants, so it creates a
-large amount of uniform work. We measured it with
-`scripts/bench_prog4_q2_all_2999.sh`, using 5 measured invocations and a 60
+large amount of uniform work. It was measured with
+a benchmark script, using 5 measured invocations and a 60
 second cooldown before each one. The raw log and parsed CSVs are archived in
 [`artifacts/experiments/prog4/q2_all_2999/`](artifacts/experiments/prog4/q2_all_2999/).
 
@@ -615,7 +615,7 @@ that the ISPC target is AVX2, which generates 8-wide SIMD instructions.
 
 **Answer:**
 
-We used one slow value per 8-wide AVX2 gang:
+The input used had one slow value per 8-wide AVX2 gang:
 
 ```cpp
 values[i] = (i % 8 == 0) ? 2.999f : 1.0f;
@@ -626,8 +626,8 @@ Newton loop exits immediately. `2.999f` is the slow in-range value used in Q2.
 This pattern is more extreme than a simple 4-fast/4-slow alternation: every
 gang still contains a slow lane, so SIMD execution time stays close to the
 all-slow case, but 7 of the 8 scalar elements are fast, which makes the serial
-baseline much faster. We measured this case with
-`scripts/bench_prog4_q3_one_slow_per_gang.sh`, again using 5 measured
+baseline much faster. This case was measured with
+a benchmark script, again using 5 measured
 invocations and a 60 second cooldown before each one. The raw log and parsed
 CSVs are archived in
 [`artifacts/experiments/prog4/q3_one_slow_per_gang/`](artifacts/experiments/prog4/q3_one_slow_per_gang/).
@@ -663,7 +663,7 @@ should be nearly as fast as, or faster than, the binary produced by ISPC.
 
 **Answer:**
 
-We added a manual AVX2 implementation in `prog4_sqrt/sqrtAVX2.cpp` and wired it
+A manual AVX2 implementation was added in `prog4_sqrt/sqrtAVX2.cpp` and wired
 into `prog4_sqrt/main.cpp` and the Makefile. The implementation processes 8
 `float` values at a time using `__m256`, matching the AVX2 width used by the
 ISPC target. It computes the same Newton iteration as the serial and ISPC
@@ -683,7 +683,7 @@ The blend keeps inactive lanes unchanged after they have converged, while lanes
 whose error is still above the threshold continue iterating. This is the manual
 AVX2 equivalent of the masked SPMD loop that ISPC generates.
 
-We measured the starter random input with `scripts/bench_prog4_q4_avx2.sh`,
+The starter random input was measured with a benchmark script,
 using 5 measured invocations and a 60 second cooldown before each one. The raw
 log and parsed CSVs are archived in
 [`artifacts/experiments/prog4/q4_avx2/`](artifacts/experiments/prog4/q4_avx2/).
@@ -715,7 +715,7 @@ answer.)
 
 **Answer:**
 
-We measured Program 5 with `scripts/bench_prog5_q1.sh`, using 5 measured
+Program 5 was measured with a benchmark script, using 5 measured
 invocations and a 60 second cooldown before each one. Each invocation still
 uses the program's built-in minimum of three timings. The raw log and parsed
 CSVs are archived in
@@ -734,7 +734,7 @@ from 20.305 GB/s to 23.308 GB/s when tasks are enabled, so the task version is
 mostly limited by memory bandwidth rather than by the number of available CPU
 cores or SIMD lanes.
 
-We do not think this implementation can be rewritten to achieve near-linear
+This implementation is unlikely to be rewritable to achieve near-linear
 speedup on this machine. The computation is already regular, balanced, and easy
 to vectorize, so the remaining bottleneck is moving data between memory and the
 cores. Adding more tasks can help only until the memory system is saturated;
@@ -786,7 +786,7 @@ and what a best-possible implementation on these systems might achieve.
 
 **Answer:**
 
-We implemented a manual AVX2 version that uses non-temporal streaming stores
+A manual AVX2 version was implemented that uses non-temporal streaming stores
 for the output array. The goal is to avoid the normal cached-store
 write-allocate behavior described in Q2. The implementation is in
 `prog5_saxpy/saxpyStreaming.cpp`: it loads 8 aligned floats from `X` and `Y`,
@@ -796,7 +796,7 @@ computes `scale * X + Y` with AVX2, and writes the result with
 stores. The implementation also issues `_mm_sfence()` before verification so
 the streaming stores are visible before the result is read.
 
-We measured it with `scripts/bench_prog5_q3_streaming.sh`, using 5 measured
+It was measured with a benchmark script, using 5 measured
 invocations and a 60 second cooldown before each one. The raw log and parsed
 CSVs are archived in
 [`artifacts/experiments/prog5/q3_streaming/`](artifacts/experiments/prog5/q3_streaming/).
